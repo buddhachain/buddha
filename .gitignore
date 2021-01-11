@@ -1,0 +1,10 @@
+
+
+buddha
+sampleconfig/buddha
+sampleconfig/*.pid
+sampleconfig/data/xuper.db
+
+# IDE
+.idea/
+.vscode/
