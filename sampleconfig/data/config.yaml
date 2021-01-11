@@ -1,0 +1,11 @@
+db:
+  name: ./data/xuper.db
+
+# buddha server info
+api:
+  port: 8686
+
+xchain:
+  endorser: "127.0.0.1:37101"
+  node: "127.0.0.1:37101"
+  bcname: xuper
