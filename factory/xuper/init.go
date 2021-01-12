@@ -2,6 +2,8 @@ package xuper
 
 import (
 	"context"
+	"encoding/hex"
+	"fmt"
 	"time"
 
 	"github.com/buddhachain/buddha/common/define"
@@ -13,7 +15,8 @@ import (
 
 var (
 	xchainClient pb.XchainClient
-	bcs []*pb.TokenDetail
+	bcname       string
+	bcs          []*pb.TokenDetail
 )
 var logger = utils.NewLogger("DEBUG", "xuper")
 
@@ -25,17 +28,18 @@ func InitXchainClient(config *define.XchainConfig) error {
 		return errors.WithMessage(err, "dial xchain server failed")
 	}
 	xchainClient = pb.NewXchainClient(conn)
-	bcs = []*pb.TokenDetail{{Bcname: config.BcName}}
+	bcname = config.BcName
+	bcs = []*pb.TokenDetail{{Bcname: bcname}}
 	return nil
 }
 
-func GetBalance(addr string) ( string, error) {
+func GetBalance(addr string) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 15000*time.Millisecond)
 	defer cancel()
 
 	addrStatus := &pb.AddressStatus{
 		Address: addr,
-		Bcs:bcs,
+		Bcs:     bcs,
 	}
 	res, err := xchainClient.GetBalance(ctx, addrStatus)
 	if err != nil {
@@ -46,4 +50,30 @@ func GetBalance(addr string) ( string, error) {
 	}
 	//res.Bcs[0].Error
 	return res.Bcs[0].Balance, nil
+}
+
+//根据tx查询交易
+func GetTx(id string) (interface{}, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 15000*time.Millisecond)
+	defer cancel()
+
+	rawTxid, err := hex.DecodeString(id)
+	if err != nil {
+		return nil, fmt.Errorf("txid format is wrong: %s", id)
+	}
+	txStatus := &pb.TxStatus{
+		Bcname: bcname,
+		Txid:   rawTxid,
+	}
+	res, err := xchainClient.QueryTx(ctx, txStatus)
+	if err != nil {
+		return nil, errors.WithMessage(err, "grpc res failed")
+	}
+	if res.Header.Error != pb.XChainErrorEnum_SUCCESS {
+		return nil, errors.New(res.Header.Error.String())
+	}
+	if res.Tx == nil {
+		return nil, errors.New("tx not found")
+	}
+	return FromPBTx(res.Tx), nil
 }

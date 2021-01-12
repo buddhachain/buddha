@@ -12,9 +12,9 @@ import (
 )
 
 var (
-	cmdRoot = "buddha"
+	cmdRoot   = "buddha"
 	serverCfg *define.ServerConfig
-	logger = utils.NewLogger("debug", "config")
+	logger    = utils.NewLogger("debug", "config")
 )
 
 func InitConfig(configFile string) error {
@@ -34,7 +34,7 @@ func InitConfigWithCmdRoot(configFile string, cmdRootPrefix string) error {
 		myViper.SetConfigFile(configFile)
 		// If a config file is found, read it in.
 		err := myViper.ReadInConfig()
-		if err != nil{
+		if err != nil {
 			return errors.Wrap(err, "Fatal error config file")
 		}
 	}
