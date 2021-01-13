@@ -24,5 +24,6 @@ func createRouter() {
 	vGroup := router.Group("/v1")
 	{
 		vGroup.GET("/account/:id", handler.GetBalance)
+		vGroup.GET("/tx/:id", handler.GetTx)
 	}
 }

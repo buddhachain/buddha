@@ -483,7 +483,9 @@ github.com/xuperchain/log15 v0.0.0-20190620081506-bc88a9198230/go.mod h1:90Da9GD
 github.com/xuperchain/wagon v0.6.1-0.20200313164333-db544e251599/go.mod h1:PjShksGcTLuvtHxudQ7nOdlvlw2NdbZrTn8jvdY9Mkw=
 github.com/xuperchain/xuper-sdk-go v1.1.0 h1:qlNntQuuB2Enx3W4m4tE+5uXaasL2O6Mos8IfOERBSI=
 github.com/xuperchain/xuper-sdk-go v1.1.0/go.mod h1:9FwtM6ZyZNT5YOA1Wg7H5jofhNuhcn0KlmlQRHcmFcA=
+github.com/xuperchain/xuperchain v0.0.0-20200518074727-6ec6c64891a4 h1:INVZgf2kPDUksNhRL/GqO3k0JDgqnmgVaL2EAuP7A1E=
 github.com/xuperchain/xuperchain v0.0.0-20200518074727-6ec6c64891a4/go.mod h1:FFtr3nHmxPXdgPO5nbjquw8o+E6yTGaqwTkUcJzNJaU=
+github.com/xuperchain/xuperchain v0.0.0-20210107120641-7c2d78fdf51e h1:BBDMLWEfPaoV3CRRfD87M4EBDmOQsmykac7at/llyEA=
 go.etcd.io/bbolt v1.3.2/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.opencensus.io v0.21.0/go.mod h1:mSImk1erAIZhrmZN+AvHh14ztQfjbGwt4TtuofqLduU=
 go.opencensus.io v0.22.0/go.mod h1:+kGneAE2xo2IficOXnaByMWTGM9T73dGwxeWcUqIpI8=
