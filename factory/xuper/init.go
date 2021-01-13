@@ -9,14 +9,18 @@ import (
 	"github.com/buddhachain/buddha/common/define"
 	"github.com/buddhachain/buddha/common/utils"
 	"github.com/pkg/errors"
+	"github.com/xuperchain/xuper-sdk-go/config"
 	"github.com/xuperchain/xuper-sdk-go/pb"
+	"github.com/xuperchain/xuper-sdk-go/transfer"
+	"github.com/xuperchain/xuper-sdk-go/xchain"
 	"google.golang.org/grpc"
 )
 
 var (
-	xchainClient pb.XchainClient
-	bcname       string
-	bcs          []*pb.TokenDetail
+	chainClient pb.XchainClient
+	trans       *transfer.Trans
+	bcname      string
+	bcs         []*pb.TokenDetail
 )
 var logger = utils.NewLogger("DEBUG", "xuper")
 
@@ -27,9 +31,23 @@ func InitXchainClient(config *define.XchainConfig) error {
 	if err != nil {
 		return errors.WithMessage(err, "dial xchain server failed")
 	}
-	xchainClient = pb.NewXchainClient(conn)
+	chainClient = pb.NewXchainClient(conn)
 	bcname = config.BcName
 	bcs = []*pb.TokenDetail{{Bcname: bcname}}
+	return initTrans(config)
+}
+
+func initTrans(conf *define.XchainConfig) error {
+	trans = &transfer.Trans{
+		Xchain: xchain.Xchain{
+			Cfg: &config.CommConfig{
+				EndorseServiceHost: conf.Endorser,
+			},
+			//Account:   account,
+			XchainSer: conf.Node,
+			ChainName: bcname,
+		},
+	}
 	return nil
 }
 
@@ -41,7 +59,7 @@ func GetBalance(addr string) (string, error) {
 		Address: addr,
 		Bcs:     bcs,
 	}
-	res, err := xchainClient.GetBalance(ctx, addrStatus)
+	res, err := chainClient.GetBalance(ctx, addrStatus)
 	if err != nil {
 		return "", err
 	}
@@ -65,7 +83,7 @@ func GetTx(id string) (interface{}, error) {
 		Bcname: bcname,
 		Txid:   rawTxid,
 	}
-	res, err := xchainClient.QueryTx(ctx, txStatus)
+	res, err := chainClient.QueryTx(ctx, txStatus)
 	if err != nil {
 		return nil, errors.WithMessage(err, "grpc res failed")
 	}

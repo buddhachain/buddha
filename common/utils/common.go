@@ -15,10 +15,10 @@ func CheckFileIsExist(filename string) bool {
 	return true
 }
 
-func Response(c *gin.Context, err error, errCode int, data interface{}){
+func Response(c *gin.Context, err error, errCode int, data interface{}) {
 	res := &define.ResponseInfo{
 		ErrCode: errCode,
-		Data: data,
+		Data:    data,
 	}
 	if err != nil {
 		res.ErrMsg = err.Error()
@@ -26,4 +26,5 @@ func Response(c *gin.Context, err error, errCode int, data interface{}){
 	ret, _ := json.Marshal(res)
 	c.Writer.Write(ret)
 	c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+	return
 }

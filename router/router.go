@@ -23,7 +23,10 @@ func createRouter() {
 
 	vGroup := router.Group("/v1")
 	{
-		vGroup.GET("/account/:id", handler.GetBalance)
+		vGroup.GET("/balance/:id", handler.GetBalance)
 		vGroup.GET("/tx/:id", handler.GetTx)
+
+		vGroup.POST("/pretx", handler.PreExec)
+		vGroup.POST("/tx", handler.PostRealTx)
 	}
 }

@@ -1,6 +1,12 @@
 package define
 
-const(
-	ESuccess = iota //成功
-	EQueryFailed
+const (
+	Success = iota //成功
+	QueryErr
+	ReadRequestBodyErr
+	PostTxErr
+	UnmarshalErr
+	PreExecErr
+
+	InsertDBErr
 )
