@@ -16,17 +16,10 @@ type DbConfig struct {
 
 type XchainConfig struct {
 	Endorser string `json:"endorser"`
-	Node string `json:"node"`
-	BcName string `json:"bcname" yaml:"bcname"`
+	Node     string `json:"node"`
+	BcName   string `json:"bcname" yaml:"bcname"`
 }
 
 type ApiConfig struct {
 	Port int `json:"port"`
-}
-
-type Transaction struct {
-	From   string `json:"string"`
-	To     string `json:"to"`
-	Amount string `json:"amount"`
-	TxId   string `json:"txId"`
 }

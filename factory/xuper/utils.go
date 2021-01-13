@@ -13,6 +13,7 @@ func FromAmountBytes(buf []byte) big.Int {
 	return n
 }
 
+//交易信息易读
 func FromPBTx(tx *pb.Transaction) *Transaction {
 	t := &Transaction{
 		Txid:              tx.Txid,
