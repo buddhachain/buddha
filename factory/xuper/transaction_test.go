@@ -31,17 +31,18 @@ func TestTransfer(t *testing.T) {
 		t.Fatalf("init err %s", err.Error())
 	}
 	to := "czojZcZ6cHSiDVJ4jFoZMB1PjKnfUiuFQ"
-	ammount := "10"
+	amount := "10"
+	fee := "0"
 	//to := "dpzuVdosQrF2kmzumhVeFQZa1aYcdgFpN"
-	preRes, err := PreExec(to, "10", "0", account.Address, "")
+	preRes, err := PreExec(to, "10", fee, account.Address, "")
 	if err != nil {
 		t.Fatalf("Pre err %s", err.Error())
 	}
 	trans.Account = account
 	trans.Initiator = account.Address
-	trans.Fee = "0"
-	trans.ToAddressAndAmount = map[string]string{to: ammount}
-	trans.TotalToAmount = "10"
+	trans.Fee = fee
+	trans.ToAddressAndAmount = map[string]string{to: amount}
+	trans.TotalToAmount = amount
 	preResByte, err := json.Marshal(preRes)
 	if err != nil {
 		t.Logf("Marshal err %s", err.Error())

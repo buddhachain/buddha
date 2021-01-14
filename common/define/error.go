@@ -9,4 +9,5 @@ const (
 	PreExecErr
 
 	InsertDBErr
+	QueryDBErr
 )

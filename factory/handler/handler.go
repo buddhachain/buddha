@@ -104,3 +104,19 @@ func PostRealTx(c *gin.Context) {
 	utils.Response(c, nil, define.Success, &txid)
 	return
 }
+
+//获取账户交易信息
+func GetTxsInfo(c *gin.Context) {
+	logger.Debug("Entering getting historical transaction information...")
+	addr := c.Param("id")
+	logger.Infof("Get %s txs", addr)
+	txs, err := db.GetTxsByAddr(addr, 0)
+	if err != nil {
+		logger.Errorf("Get txs info failed: %s", err.Error())
+		utils.Response(c, err, define.QueryDBErr, nil)
+		return
+	}
+	logger.Infof("Get %s txs: %+v", addr, txs)
+	utils.Response(c, nil, define.Success, &txs)
+	return
+}
