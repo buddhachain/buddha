@@ -25,6 +25,7 @@ func createRouter() {
 	{
 		vGroup.GET("/balance/:id", handler.GetBalance)
 		vGroup.GET("/tx/:id", handler.GetTx)
+		vGroup.GET("/txs/:id", handler.GetTxsInfo)
 
 		vGroup.POST("/pretx", handler.PreExec)
 		vGroup.POST("/tx", handler.PostRealTx)

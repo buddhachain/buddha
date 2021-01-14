@@ -4,6 +4,7 @@ buddha
 sampleconfig/buddha
 sampleconfig/*.pid
 sampleconfig/data/xuper.db
+zhtest
 
 # IDE
 .idea/

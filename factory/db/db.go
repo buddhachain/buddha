@@ -52,6 +52,6 @@ func GetTxsByAddr(addr string, limit int) (txs []*Transaction, err error) {
 	if limit < 1 {
 		limit = 10
 	}
-	err = DB.Model(&Transaction{}).Where("from = ? ", addr).Or(" to = ?", addr).Limit(limit).Find(txs).Error
+	err = DB.Where("\"from\" = ? OR \"to\" = ?", addr, addr).Limit(limit).Find(&txs).Error
 	return
 }
