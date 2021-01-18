@@ -4,6 +4,10 @@ buddha
 sampleconfig/buddha
 sampleconfig/*.pid
 sampleconfig/data/xuper.db
+
+eventserver/data/event.db
+eventserver/data/private.key
+eventserver/eventserver
 zhtest
 
 # IDE

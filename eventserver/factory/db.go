@@ -1,0 +1,56 @@
+package factory
+
+import (
+	"github.com/pkg/errors"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
+)
+
+var DB *gorm.DB
+
+type FilteredBlock struct {
+	ID          int64  `json:"id" gorm:"primary_key;AUTO_INCREMENT;column:id"`
+	Bcname      string `json:"bcname"`
+	BlockID     string `json:"blockid"`
+	BlockHeight int64  `json:"block_height"`
+	TxCount     int    `json:"tx_count"`
+}
+
+type FilteredTransaction struct {
+	ID      uint64 `json:"id" gorm:"primary_key;AUTO_INCREMENT;column:id"`
+	Txid    string `json:"txid"`
+	BlockID string `json:"blockid"`
+	Events  string `json:"events"`
+}
+
+func InitDb(config *DbConfig) error {
+	logger.Infof("Using db config %+v", config)
+	var err error
+	DB, err = gorm.Open(sqlite.Open(config.Name), &gorm.Config{})
+	if err != nil {
+		logger.Fatalf("Initialization database connection error.")
+		return errors.WithMessage(err, "open db failed")
+	}
+	db, err := DB.DB()
+	if err != nil {
+		return errors.WithMessage(err, "get sql.DB failed")
+	}
+	db.SetMaxIdleConns(10)
+	db.SetMaxOpenConns(10)
+	err = DB.AutoMigrate(&FilteredBlock{})
+	err = DB.AutoMigrate(&FilteredTransaction{})
+	if err != nil {
+		logger.Errorf("Migrate table failed %s", err.Error())
+		return errors.WithMessage(err, "migrate table failed")
+	}
+	logger.Info("Init db success.")
+	return nil
+}
+
+func InsertFilteredBlock(block *FilteredBlock) error {
+	return DB.Create(block).Error
+}
+
+func InsertFilteredTx(tx *FilteredTransaction) error {
+	return DB.Create(tx).Error
+}
