@@ -18,11 +18,12 @@ import (
 )
 
 var (
-	chainClient pb.XchainClient
-	trans       *transfer.Trans
-	bcname      string
-	bcs         []*pb.TokenDetail
-	rootAccount *account.Account
+	contractName = "counter"
+	chainClient  pb.XchainClient
+	trans        *transfer.Trans
+	bcname       string
+	bcs          []*pb.TokenDetail
+	rootAccount  *account.Account
 )
 var logger = utils.NewLogger("DEBUG", "xuper")
 
