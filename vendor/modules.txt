@@ -23,6 +23,7 @@ github.com/go-playground/universal-translator
 # github.com/go-playground/validator/v10 v10.2.0
 github.com/go-playground/validator/v10
 # github.com/golang/protobuf v1.3.3
+## explicit
 github.com/golang/protobuf/proto
 github.com/golang/protobuf/protoc-gen-go/descriptor
 github.com/golang/protobuf/ptypes
@@ -81,8 +82,11 @@ github.com/spf13/viper
 github.com/subosito/gotenv
 # github.com/ugorji/go/codec v1.1.7
 github.com/ugorji/go/codec
-# github.com/xuperchain/crypto v0.0.0-20200518095800-1d73ac7c9747
+# github.com/xuperchain/crypto v0.0.0-20200701044454-40fff89406a7
+github.com/xuperchain/crypto/client/service/base
+github.com/xuperchain/crypto/client/service/gm
 github.com/xuperchain/crypto/client/service/xchain
+github.com/xuperchain/crypto/common/account
 github.com/xuperchain/crypto/core/account
 github.com/xuperchain/crypto/core/aes
 github.com/xuperchain/crypto/core/base58
@@ -104,16 +108,41 @@ github.com/xuperchain/crypto/core/secret_share/complex_secret_share
 github.com/xuperchain/crypto/core/sign
 github.com/xuperchain/crypto/core/signature
 github.com/xuperchain/crypto/core/utils
-# github.com/xuperchain/xuper-sdk-go v1.1.0
+github.com/xuperchain/crypto/gm/account
+github.com/xuperchain/crypto/gm/aes
+github.com/xuperchain/crypto/gm/base58
+github.com/xuperchain/crypto/gm/common
+github.com/xuperchain/crypto/gm/config
+github.com/xuperchain/crypto/gm/ecies
+github.com/xuperchain/crypto/gm/gmsm/sm2
+github.com/xuperchain/crypto/gm/gmsm/sm3
+github.com/xuperchain/crypto/gm/hash
+github.com/xuperchain/crypto/gm/hdwallet/api
+github.com/xuperchain/crypto/gm/hdwallet/key
+github.com/xuperchain/crypto/gm/hdwallet/keychain
+github.com/xuperchain/crypto/gm/hdwallet/rand
+github.com/xuperchain/crypto/gm/hdwallet/wordlist
+github.com/xuperchain/crypto/gm/multisign
+github.com/xuperchain/crypto/gm/schnorr_ring_sign
+github.com/xuperchain/crypto/gm/schnorr_sign
+github.com/xuperchain/crypto/gm/secret_share/big_polynomial
+github.com/xuperchain/crypto/gm/secret_share/complex_secret_share
+github.com/xuperchain/crypto/gm/sign
+github.com/xuperchain/crypto/gm/signature
+github.com/xuperchain/crypto/gm/utils
+# github.com/xuperchain/xuper-sdk-go v0.0.0-20201120023737-65f831e12afa
 ## explicit
 github.com/xuperchain/xuper-sdk-go/account
 github.com/xuperchain/xuper-sdk-go/common
 github.com/xuperchain/xuper-sdk-go/config
+github.com/xuperchain/xuper-sdk-go/contract
 github.com/xuperchain/xuper-sdk-go/crypto
 github.com/xuperchain/xuper-sdk-go/pb
 github.com/xuperchain/xuper-sdk-go/transfer
 github.com/xuperchain/xuper-sdk-go/txhash
 github.com/xuperchain/xuper-sdk-go/xchain
+# github.com/xuperchain/xuperchain v0.0.0-20200518074727-6ec6c64891a4
+## explicit
 # go.uber.org/atomic v1.4.0
 go.uber.org/atomic
 # go.uber.org/multierr v1.1.0
@@ -129,6 +158,7 @@ go.uber.org/zap/zapcore
 # golang.org/x/crypto v0.0.0-20200320181102-891825fb96df
 golang.org/x/crypto/pbkdf2
 golang.org/x/crypto/ripemd160
+golang.org/x/crypto/sha3
 # golang.org/x/net v0.0.0-20200202094626-16171245cfb2
 golang.org/x/net/http/httpguts
 golang.org/x/net/http2
@@ -137,6 +167,7 @@ golang.org/x/net/idna
 golang.org/x/net/internal/timeseries
 golang.org/x/net/trace
 # golang.org/x/sys v0.0.0-20200116001909-b77594299b42
+golang.org/x/sys/cpu
 golang.org/x/sys/unix
 # golang.org/x/text v0.3.2
 golang.org/x/text/secure/bidirule

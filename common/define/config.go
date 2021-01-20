@@ -15,9 +15,11 @@ type DbConfig struct {
 }
 
 type XchainConfig struct {
-	Endorser string `json:"endorser"`
-	Node     string `json:"node"`
-	BcName   string `json:"bcname" yaml:"bcname"`
+	Endorser   string `json:"endorser"`
+	Node       string `json:"node"`
+	BcName     string `json:"bcname" yaml:"bcname"`
+	Root       string `json:"root"`   //管理账户地址文件夹
+	RootPasswd string `json:"passwd"` //私钥密码， 明文为空
 }
 
 type ApiConfig struct {
