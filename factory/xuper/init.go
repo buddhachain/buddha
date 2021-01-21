@@ -9,6 +9,7 @@ import (
 	"github.com/buddhachain/buddha/common/define"
 	"github.com/buddhachain/buddha/common/utils"
 	"github.com/pkg/errors"
+	"github.com/xuperchain/xuper-sdk-go/account"
 	"github.com/xuperchain/xuper-sdk-go/config"
 	"github.com/xuperchain/xuper-sdk-go/pb"
 	"github.com/xuperchain/xuper-sdk-go/transfer"
@@ -21,6 +22,7 @@ var (
 	trans       *transfer.Trans
 	bcname      string
 	bcs         []*pb.TokenDetail
+	rootAccount *account.Account
 )
 var logger = utils.NewLogger("DEBUG", "xuper")
 
@@ -38,6 +40,16 @@ func InitXchainClient(config *define.XchainConfig) error {
 }
 
 func initTrans(conf *define.XchainConfig) error {
+	var err error
+	if conf.RootPasswd == "" {
+		rootAccount, err = account.GetAccountFromPlainFile(conf.Root)
+	} else {
+		rootAccount, err = account.GetAccountFromFile(conf.Root, conf.RootPasswd)
+	}
+	if err != nil {
+		return errors.WithMessage(err, "get root account failed")
+	}
+
 	trans = &transfer.Trans{
 		Xchain: xchain.Xchain{
 			Cfg: &config.CommConfig{
@@ -94,4 +106,10 @@ func GetTx(id string) (interface{}, error) {
 		return nil, errors.New("tx not found")
 	}
 	return FromPBTx(res.Tx), nil
+}
+
+//用户充值方法
+func Recharge(to, amount string) (string, error) {
+	trans.Account = rootAccount
+	return trans.Transfer(to, amount, "0", "")
 }

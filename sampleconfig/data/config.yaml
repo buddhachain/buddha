@@ -9,3 +9,5 @@ xchain:
   endorser: "127.0.0.1:37101"
   node: "127.0.0.1:37101"
   bcname: xuper
+  root: ./data/root
+  passwd:
