@@ -18,11 +18,12 @@ import (
 )
 
 var (
-	chainClient pb.XchainClient
-	trans       *transfer.Trans
-	bcname      string
-	bcs         []*pb.TokenDetail
-	rootAccount *account.Account
+	contractName = "counter"
+	chainClient  pb.XchainClient
+	trans        *transfer.Trans
+	bcname       string
+	bcs          []*pb.TokenDetail
+	rootAccount  *account.Account
 )
 var logger = utils.NewLogger("DEBUG", "xuper")
 
@@ -41,15 +42,18 @@ func InitXchainClient(config *define.XchainConfig) error {
 
 func initTrans(conf *define.XchainConfig) error {
 	var err error
-	if conf.RootPasswd == "" {
-		rootAccount, err = account.GetAccountFromPlainFile(conf.Root)
+	if conf.Root != "" {
+		if conf.RootPasswd == "" {
+			rootAccount, err = account.GetAccountFromPlainFile(conf.Root)
+		} else {
+			rootAccount, err = account.GetAccountFromFile(conf.Root, conf.RootPasswd)
+		}
+		if err != nil {
+			return errors.WithMessage(err, "get root account failed")
+		}
 	} else {
-		rootAccount, err = account.GetAccountFromFile(conf.Root, conf.RootPasswd)
+		logger.Warn("No root account.")
 	}
-	if err != nil {
-		return errors.WithMessage(err, "get root account failed")
-	}
-
 	trans = &transfer.Trans{
 		Xchain: xchain.Xchain{
 			Cfg: &config.CommConfig{
