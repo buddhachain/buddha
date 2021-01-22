@@ -1,7 +1,8 @@
 package xuper
 
 import (
-	"log"
+	"context"
+	"time"
 
 	"github.com/pkg/errors"
 	"github.com/xuperchain/xuper-sdk-go/common"
@@ -9,7 +10,7 @@ import (
 )
 
 //preExe invoke wasm contract
-func PreInvokeWasmContract(from, amount, fee, methodName string, args map[string]string) (interface{}, error) {
+func PreInvokeWasmContract(from, amount, cName, methodName string, args map[string]string) (interface{}, error) {
 	amount, ok := common.IsValidAmount(amount)
 	if !ok {
 		return "", common.ErrInvalidAmount
@@ -19,11 +20,14 @@ func PreInvokeWasmContract(from, amount, fee, methodName string, args map[string
 	//	return "", common.ErrInvalidAmount
 	//}
 	// generate preExe request
+	if cName == "" {
+		cName = contractName
+	}
 	invokeRequests := []*pb.InvokeRequest{
 		{
 			ModuleName:   "wasm",
 			MethodName:   methodName,
-			ContractName: contractName,
+			ContractName: cName,
 			Args:         convertToXuperContractArgs(args),
 			//Amount:       amount,
 		},
@@ -45,7 +49,7 @@ func PreInvokeWasmContract(from, amount, fee, methodName string, args map[string
 	// preExe
 	preExeWithSelRes, err := trans.PreExecWithSelecUTXO()
 	if err != nil {
-		log.Printf("Transfer PreExecWithSelecUTXO failed, err: %v", err)
+		logger.Errorf("Transfer PreExecWithSelecUTXO failed, err: %s", err.Error())
 		return nil, err
 	}
 	if preExeWithSelRes.Response == nil {
@@ -60,4 +64,41 @@ func convertToXuperContractArgs(args map[string]string) map[string][]byte {
 		argmap[k] = []byte(v)
 	}
 	return argmap
+}
+
+func QueryWasmContract(from, methodName string, args map[string]string) ([]byte, error) {
+	contractName := "exchange"
+	invokeRequests := []*pb.InvokeRequest{
+		{
+			ModuleName:   "wasm",
+			MethodName:   methodName,
+			ContractName: contractName,
+			Args:         convertToXuperContractArgs(args),
+			//Amount:       amount,
+		},
+	}
+
+	invokeRPCReq := &pb.InvokeRPCRequest{
+		Bcname:    trans.ChainName,
+		Requests:  invokeRequests,
+		Initiator: from,
+		//		AuthRequire: authRequires,
+	}
+
+	// preExe
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+	preExeRPCRes, err := chainClient.PreExec(ctx, invokeRPCReq)
+	if err != nil {
+		logger.Errorf("Transfer PreExecWithSelecUTXO failed, err: %s", err.Error())
+		return nil, err
+	}
+	responses := preExeRPCRes.GetResponse().GetResponses()
+	for _, res := range responses {
+		if res.Status >= 400 {
+			return nil, errors.Errorf("contract error status:%d message:%s", res.Status, res.Message)
+		}
+		logger.Infof("contract response: %s\n", string(res.Body))
+	}
+	return responses[0].Body, nil
 }

@@ -18,7 +18,7 @@ import (
 )
 
 var (
-	contractName = "counter"
+	contractName = "exchange"
 	chainClient  pb.XchainClient
 	trans        *transfer.Trans
 	bcname       string

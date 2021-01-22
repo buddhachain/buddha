@@ -7,7 +7,10 @@ const (
 	PostTxErr
 	UnmarshalErr
 	PreExecErr
+	PreInvokeWasmErr
 
 	InsertDBErr
 	QueryDBErr
+
+	QueryContractErr
 )
