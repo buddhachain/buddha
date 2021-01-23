@@ -10,6 +10,7 @@ import (
 	"github.com/buddhachain/buddha/factory/xuper"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/protobuf/proto"
+	"github.com/pkg/errors"
 	"github.com/xuperchain/xuper-sdk-go/pb"
 )
 
@@ -25,6 +26,19 @@ func GetBalance(c *gin.Context) {
 		return
 	}
 	logger.Infof("Get account %s balance %s", addr, balance)
+	utils.Response(c, nil, define.Success, &balance)
+	return
+}
+
+func GetBalanceDetail(c *gin.Context) {
+	addr := c.Param("id")
+	balance, err := xuper.GetBalanceDetail(addr)
+	if err != nil {
+		logger.Errorf("Get %s balance failed %s", addr, err.Error())
+		utils.Response(c, err, define.QueryErr, nil)
+		return
+	}
+	logger.Infof("Get account %s balance detail %+v", addr, balance)
 	utils.Response(c, nil, define.Success, &balance)
 	return
 }
@@ -119,4 +133,12 @@ func GetTxsInfo(c *gin.Context) {
 	logger.Infof("Get %s txs: %+v", addr, txs)
 	utils.Response(c, nil, define.Success, &txs)
 	return
+}
+
+func readBody(c *gin.Context, req interface{}) error {
+	body, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		return errors.WithMessage(err, "read request body failed")
+	}
+	return json.Unmarshal(body, req)
 }
