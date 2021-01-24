@@ -20,7 +20,7 @@ func GetProductByID(c *gin.Context) {
 	logger.Debug("Entering get production by id...")
 	id := c.Param("id")
 	addr := c.Query("addr")
-	res, err := xuper.QueryWasmContract(addr, FIND, map[string]string{"id": id})
+	res, err := xuper.QueryWasmContract(addr, EXCHANGE, FIND, map[string]string{"id": id})
 	if err != nil {
 		logger.Errorf("Get production by %s failed %s", id, err.Error())
 		utils.Response(c, err, define.QueryContractErr, nil)

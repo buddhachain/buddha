@@ -31,6 +31,12 @@ func createRouter() {
 		vGroup.POST("/pretx", handler.PreExec)
 		vGroup.POST("/tx", handler.PostRealTx)
 
+		contract := vGroup.Group("contract")
+		{
+			contract.POST("/invoke", handler.PreInvoke)   //合约通用invoke与执行接口
+			contract.GET("/query", handler.ContractQuery) //合约通用查询接口
+		}
+
 		exchange := vGroup.Group("/exchange")
 		{
 			exchange.GET("/product/:id", handler.GetProductByID)
