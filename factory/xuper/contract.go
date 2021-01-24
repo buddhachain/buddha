@@ -66,13 +66,16 @@ func convertToXuperContractArgs(args map[string]string) map[string][]byte {
 	return argmap
 }
 
-func QueryWasmContract(from, methodName string, args map[string]string) ([]byte, error) {
-	contractName := "exchange"
+func QueryWasmContract(from, cName, methodName string, args map[string]string) ([]byte, error) {
+	if cName == "" {
+		cName = contractName
+	}
+
 	invokeRequests := []*pb.InvokeRequest{
 		{
 			ModuleName:   "wasm",
 			MethodName:   methodName,
-			ContractName: contractName,
+			ContractName: cName,
 			Args:         convertToXuperContractArgs(args),
 			//Amount:       amount,
 		},
