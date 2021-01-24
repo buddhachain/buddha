@@ -60,6 +60,20 @@ func HandlerEvents() error {
 				logger.Errorf("Insert tx failed %s", err.Error())
 				return err
 			}
+			for _, event := range fTx.Events {
+				cEvent := &ContractEvent{
+					Txid:     fTx.Txid,
+					BlockID:  block.Blockid,
+					Contract: event.Contract,
+					Name:     event.Name,
+					Body:     string(event.Body),
+				}
+				err = InsertContractEvent(cEvent)
+				if err != nil {
+					logger.Errorf("Insert contract event failed %s", err.Error())
+					return err
+				}
+			}
 		}
 	}
 }
