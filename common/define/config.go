@@ -4,6 +4,7 @@ type ServerConfig struct {
 	Db     *DbConfig     `json:"db"`
 	Api    *ApiConfig    `json:"api"`
 	Xchain *XchainConfig `json:"xchain"`
+	Ipfs   *IpfsConf     `json:"ipfs"`
 }
 
 type DbConfig struct {
@@ -24,4 +25,8 @@ type XchainConfig struct {
 
 type ApiConfig struct {
 	Port int `json:"port"`
+}
+
+type IpfsConf struct {
+	Url string `json:"url"`
 }

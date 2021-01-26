@@ -43,6 +43,11 @@ func createRouter() {
 			exchange.POST("/product", handler.PreAddProduct)
 		}
 
+		ipfs := vGroup.Group("/ipfs")
+		{
+			ipfs.GET("/cat/:id", handler.CatIPFS)
+		}
+
 	}
 
 }

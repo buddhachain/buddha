@@ -6,6 +6,7 @@ import (
 	"github.com/buddhachain/buddha/common/define"
 	"github.com/buddhachain/buddha/common/utils"
 	"github.com/buddhachain/buddha/factory/db"
+	"github.com/buddhachain/buddha/factory/handler"
 	"github.com/buddhachain/buddha/factory/xuper"
 	"github.com/pkg/errors"
 	"github.com/spf13/viper"
@@ -53,6 +54,7 @@ func InitConfigWithCmdRoot(configFile string, cmdRootPrefix string) error {
 	if err != nil {
 		return errors.WithMessage(err, "init xchain client failed")
 	}
+	handler.InitIPFS(serverCfg.Ipfs.Url)
 	return nil
 }
 
