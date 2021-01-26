@@ -23,6 +23,15 @@ type FilteredTransaction struct {
 	Events  string `json:"events"`
 }
 
+type ContractEvent struct {
+	ID       uint64 `json:"id" gorm:"primary_key;AUTO_INCREMENT;column:id"`
+	Txid     string `json:"txid"`
+	BlockID  string `json:"blockid"`
+	Contract string `json:"contract"`
+	Name     string `json:"name"`
+	Body     string `json:"body"`
+}
+
 func InitDb(config *DbConfig) error {
 	logger.Infof("Using db config %+v", config)
 	var err error
@@ -39,6 +48,7 @@ func InitDb(config *DbConfig) error {
 	db.SetMaxOpenConns(10)
 	err = DB.AutoMigrate(&FilteredBlock{})
 	err = DB.AutoMigrate(&FilteredTransaction{})
+	err = DB.AutoMigrate(&ContractEvent{})
 	if err != nil {
 		logger.Errorf("Migrate table failed %s", err.Error())
 		return errors.WithMessage(err, "migrate table failed")
@@ -52,5 +62,9 @@ func InsertFilteredBlock(block *FilteredBlock) error {
 }
 
 func InsertFilteredTx(tx *FilteredTransaction) error {
+	return DB.Create(tx).Error
+}
+
+func InsertContractEvent(tx *ContractEvent) error {
 	return DB.Create(tx).Error
 }

@@ -8,7 +8,7 @@ export PREFIX
 
 buddha:
 	@echo "Building buddha...."
-	go build -ldflags "-linkmode external -extldflags '-static' -s -w" -o sampleconfig/buddha
+	go build -ldflags "-linkmode external -extldflags '-static' -s -w" -mod=vendor -o sampleconfig/buddha
 
 event:
 	@echo "Building buddha...."

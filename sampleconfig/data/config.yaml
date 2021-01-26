@@ -11,3 +11,6 @@ xchain:
   bcname: xuper
   root: ./data/root
   passwd:
+
+ipfs:
+  url: "127.0.0.1:5001"

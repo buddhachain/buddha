@@ -7,6 +7,7 @@ require (
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
 	github.com/gin-gonic/gin v1.6.3
 	github.com/golang/protobuf v1.3.3
+	github.com/ipfs/go-ipfs-api v0.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/viper v1.7.1
 	github.com/xuperchain/xuper-sdk-go v0.0.0-20201120023737-65f831e12afa

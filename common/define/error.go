@@ -13,4 +13,10 @@ const (
 	QueryDBErr
 
 	QueryContractErr
+
+	LoadFileErr
+	IpfsAddErr
+	IpfsCatErr
+
+	ReaderErr
 )

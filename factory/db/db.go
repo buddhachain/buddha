@@ -40,6 +40,11 @@ func InitDb(config *define.DbConfig) error {
 		logger.Errorf("Migrate table failed %s", err.Error())
 		return errors.WithMessage(err, "migrate table failed")
 	}
+	err = DB.AutoMigrate(&IpfsBase{})
+	if err != nil {
+		logger.Errorf("Migrate table failed %s", err.Error())
+		return errors.WithMessage(err, "migrate table failed")
+	}
 	logger.Info("Init db success.")
 	return nil
 }
