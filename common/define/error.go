@@ -19,4 +19,5 @@ const (
 	IpfsCatErr
 
 	ReaderErr
+	ConvertErr
 )

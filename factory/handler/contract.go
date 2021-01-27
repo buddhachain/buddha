@@ -1,10 +1,17 @@
 package handler
 
 import (
+	"encoding/hex"
+	"encoding/json"
+	"io/ioutil"
+
 	"github.com/buddhachain/buddha/common/define"
 	"github.com/buddhachain/buddha/common/utils"
+	"github.com/buddhachain/buddha/factory/db"
 	"github.com/buddhachain/buddha/factory/xuper"
 	"github.com/gin-gonic/gin"
+	"github.com/golang/protobuf/proto"
+	"github.com/xuperchain/xuper-sdk-go/pb"
 )
 
 func PreInvoke(c *gin.Context) {
@@ -52,4 +59,62 @@ func ContractQuery(c *gin.Context) {
 	logger.Infof("Query wasm contract transaction result %+v", res)
 	utils.Response(c, nil, define.Success, res)
 	return
+}
+
+//合约通用上传合约接口
+func PostContractRealTx(c *gin.Context) {
+	logger.Debug("Entering post real tx...")
+	body, err := ioutil.ReadAll(c.Request.Body)
+	if err != nil {
+		logger.Errorf("Read request body failed %s", err.Error())
+		utils.Response(c, err, define.ReadRequestBodyErr, nil)
+		return
+	}
+	transaction := &pb.Transaction{}
+	err = proto.Unmarshal(body, transaction)
+	if err != nil {
+		logger.Errorf("Unmarshal request body to pb.Transaction failed: %s", err.Error())
+		utils.Response(c, err, define.UnmarshalErr, nil)
+		return
+	}
+	logger.Infof("Request info %+v", transaction)
+	txid, err := xuper.PostRealTx(transaction)
+	if err != nil {
+		logger.Errorf("Post real tx failed: %s", err.Error())
+		utils.Response(c, err, define.PostTxErr, nil)
+		return
+	}
+	logger.Info("Post tx: %s success", txid)
+	txInfo, err := convertToContractTx(transaction)
+	if err != nil {
+		logger.Errorf("Convert to contract tx info failed: %s", err.Error())
+		utils.Response(c, err, define.ConvertErr, nil)
+		return
+	}
+	if err := db.InsertContractTx(txInfo); err != nil {
+		logger.Errorf("Insert contract tx info failed: %s", err.Error())
+		utils.Response(c, err, define.InsertDBErr, nil)
+		return
+	}
+	utils.Response(c, nil, define.Success, &txid)
+	return
+}
+
+func convertToContractTx(tx *pb.Transaction) (*db.ContractTx, error) {
+	txInfo := &db.ContractTx{
+		From: tx.Initiator,
+		TxId: hex.EncodeToString(tx.Txid),
+	}
+	if len(tx.ContractRequests) == 0 {
+		return txInfo, nil
+	}
+	txInfo.Amount = tx.ContractRequests[0].Amount
+	txInfo.ContractName = tx.ContractRequests[0].ContractName
+	txInfo.MethodName = tx.ContractRequests[0].MethodName
+	args, err := json.Marshal(tx.ContractRequests[0].Args)
+	if err != nil {
+		return nil, err
+	}
+	txInfo.Args = string(args)
+	return txInfo, nil
 }
