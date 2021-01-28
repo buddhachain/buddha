@@ -33,7 +33,7 @@ func main() {
 	// 设置使用系统最大CPU
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	// 运行模式
-	gin.SetMode(gin.DebugMode) //ReleaseMode
+	gin.SetMode(gin.ReleaseMode) //ReleaseMode
 	router := router.GetRouter()
 	// 调试用,可以看到堆栈状态和所有goroutine状态
 	ginpprof.Wrapper(router)

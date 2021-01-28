@@ -50,6 +50,11 @@ func InitDb(config *define.DbConfig) error {
 		logger.Errorf("Migrate table failed %s", err.Error())
 		return errors.WithMessage(err, "migrate table failed")
 	}
+	err = DB.AutoMigrate(&NewBag{})
+	if err != nil {
+		logger.Errorf("Migrate table failed %s", err.Error())
+		return errors.WithMessage(err, "migrate table failed")
+	}
 	logger.Info("Init db success.")
 	return nil
 }
@@ -64,4 +69,8 @@ func GetTxsByAddr(addr string, limit int) (txs []*Transaction, err error) {
 	}
 	err = DB.Where("\"from\" = ? OR \"to\" = ?", addr, addr).Limit(limit).Find(&txs).Error
 	return
+}
+
+func InsertRow(value interface{}) error {
+	return DB.Create(value).Error
 }

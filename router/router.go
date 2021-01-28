@@ -41,6 +41,7 @@ func createRouter() {
 		exchange := vGroup.Group("/exchange")
 		{
 			exchange.GET("/product/:id", handler.GetProductByID)
+			contract.POST("/product/post", handler.PostProductRealTx) //合约通用查询接口
 			exchange.POST("/product", handler.PreAddProduct)
 		}
 
@@ -49,6 +50,10 @@ func createRouter() {
 			ipfs.GET("/cat/:id", handler.CatIPFS)
 		}
 
+		charge := vGroup.Group("/charge")
+		{
+			charge.POST("/gift/newcomer", handler.NewcomerCharge)
+		}
 	}
 
 }
