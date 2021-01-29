@@ -12,8 +12,13 @@ type ProBase struct {
 
 type Product struct {
 	ProBase
-	Initiator string    `json:"Initiator"`
+	Initiator string    `json:"initiator"`
 	TxId      string    `json:"tx_id"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+	DeletedAt time.Time `json:"deleted_at"`
+}
+
+func DeleteProduct(id string) error {
+	return DB.Where("\"id\" = ?", id).Delete(&Product{}).Error
 }

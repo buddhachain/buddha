@@ -13,12 +13,15 @@ var (
 	logger = utils.NewLogger("DEBUG", "factory/db")
 )
 
+type TxBase struct {
+	TxId      string `json:"id" gorm:"primary_key;column:id" form:"id"` // 需要做唯一索引,所以必须存在。
+	Initiator string `json:"initiator"`
+}
+
 type Transaction struct {
-	ID     uint   `json:"id" gorm:"primary_key;AUTO_INCREMENT;column:id" form:"id"` // 需要做唯一索引,所以必须存在。
-	From   string `json:"from"`
+	TxBase
 	To     string `json:"to"`
 	Amount string `json:"amount"`
-	TxId   string `json:"txId"`
 }
 
 func InitDb(config *define.DbConfig) error {
@@ -35,28 +38,36 @@ func InitDb(config *define.DbConfig) error {
 	}
 	db.SetMaxIdleConns(10)
 	db.SetMaxOpenConns(10)
-	err = DB.AutoMigrate(&Transaction{})
+	err = migrateTables()
 	if err != nil {
-		logger.Errorf("Migrate table failed %s", err.Error())
-		return errors.WithMessage(err, "migrate table failed")
-	}
-	err = DB.AutoMigrate(&IpfsBase{})
-	if err != nil {
-		logger.Errorf("Migrate table failed %s", err.Error())
-		return errors.WithMessage(err, "migrate table failed")
-	}
-	err = DB.AutoMigrate(&ContractTx{})
-	if err != nil {
-		logger.Errorf("Migrate table failed %s", err.Error())
-		return errors.WithMessage(err, "migrate table failed")
-	}
-	err = DB.AutoMigrate(&NewBag{})
-	if err != nil {
-		logger.Errorf("Migrate table failed %s", err.Error())
+		logger.Errorf("Migrate tables failed %s", err.Error())
 		return errors.WithMessage(err, "migrate table failed")
 	}
 	logger.Info("Init db success.")
 	return nil
+}
+
+func migrateTables() error {
+	err := DB.AutoMigrate(&Transaction{})
+	if err != nil {
+		return err
+	}
+	err = DB.AutoMigrate(&NewBag{})
+	if err != nil {
+		return err
+	}
+	err = DB.AutoMigrate(&IpfsBase{})
+	if err != nil {
+		return err
+	}
+	err = DB.AutoMigrate(&ContractTx{})
+	if err != nil {
+		return err
+	}
+	return nil
+	//if err != nil {
+	//	return err
+	//}
 }
 
 func InsertTxInfo(tx *Transaction) error {
@@ -67,7 +78,7 @@ func GetTxsByAddr(addr string, limit int) (txs []*Transaction, err error) {
 	if limit < 1 {
 		limit = 10
 	}
-	err = DB.Where("\"from\" = ? OR \"to\" = ?", addr, addr).Limit(limit).Find(&txs).Error
+	err = DB.Where("\"initiator\" = ? OR \"to\" = ?", addr, addr).Limit(limit).Find(&txs).Error
 	return
 }
 
