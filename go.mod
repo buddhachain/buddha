@@ -9,6 +9,7 @@ require (
 	github.com/golang/protobuf v1.3.3
 	github.com/ipfs/go-ipfs-api v0.2.0
 	github.com/pkg/errors v0.9.1
+	github.com/rs/xid v1.2.1
 	github.com/spf13/viper v1.7.1
 	github.com/xuperchain/xuper-sdk-go v0.0.0-20201120023737-65f831e12afa
 	github.com/xuperchain/xuperchain v0.0.0-20200518074727-6ec6c64891a4 // indirect

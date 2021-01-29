@@ -24,6 +24,7 @@ var (
 	bcname       string
 	bcs          []*pb.TokenDetail
 	rootAccount  *account.Account
+	RootAddr     string
 )
 var logger = utils.NewLogger("DEBUG", "xuper")
 
@@ -48,6 +49,7 @@ func initTrans(conf *define.XchainConfig) error {
 		} else {
 			rootAccount, err = account.GetAccountFromFile(conf.Root, conf.RootPasswd)
 		}
+		RootAddr = rootAccount.Address
 		if err != nil {
 			return errors.WithMessage(err, "get root account failed")
 		}

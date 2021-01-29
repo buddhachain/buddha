@@ -1,19 +1,24 @@
 package handler
 
 import (
+	"encoding/hex"
 	"encoding/json"
 
 	"github.com/buddhachain/buddha/common/define"
 	"github.com/buddhachain/buddha/common/utils"
+	"github.com/buddhachain/buddha/factory/db"
 	"github.com/buddhachain/buddha/factory/xuper"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"github.com/rs/xid"
+	"github.com/xuperchain/xuper-sdk-go/pb"
 )
 
 const (
-	FIND     = "find"
-	ADD      = "add"
-	EXCHANGE = "exchange"
+	FIND            = "find"
+	ADD             = "add"
+	EXCHANGE        = "exchange"
+	NEWCOMERGIFTBAG = "1000000" //0.0001BUD
 )
 
 func GetProductByID(c *gin.Context) {
@@ -53,6 +58,8 @@ func PreAddProduct(c *gin.Context) {
 		utils.Response(c, err, define.ReadRequestBodyErr, nil)
 		return
 	}
+	//产品id由工具包生成uuid
+	req.ID = xid.New().String()
 	logger.Infof("Request info %+v", req)
 	conReq, err := convertToMapString(req.Product)
 	if err != nil {
@@ -71,6 +78,39 @@ func PreAddProduct(c *gin.Context) {
 	return
 }
 
+func PostProductRealTx(c *gin.Context) {
+	logger.Debug("Entering post product real tx...")
+
+	transaction := &pb.Transaction{}
+	err, errCode := unmarshalProto(c, transaction)
+	if err != nil {
+		logger.Errorf("Parse request body to pb.Transaction failed: %s", err.Error())
+		utils.Response(c, err, errCode, nil)
+		return
+	}
+	logger.Infof("Request info %+v", transaction)
+	txid, err := xuper.PostRealTx(transaction)
+	if err != nil {
+		logger.Errorf("Post real tx failed: %s", err.Error())
+		utils.Response(c, err, define.PostTxErr, nil)
+		return
+	}
+	logger.Info("Post tx: %s success", txid)
+	txInfo, err := convertToProduction(transaction)
+	if err != nil {
+		logger.Errorf("Convert to production info failed: %s", err.Error())
+		utils.Response(c, err, define.ConvertErr, nil)
+		return
+	}
+	if err := db.InsertRow(txInfo); err != nil {
+		logger.Errorf("Insert production info failed: %s", err.Error())
+		utils.Response(c, err, define.InsertDBErr, nil)
+		return
+	}
+	utils.Response(c, nil, define.Success, &txid)
+	return
+}
+
 func convertToMapString(info interface{}) (map[string]string, error) {
 	byte, err := json.Marshal(info)
 	if err != nil {
@@ -82,4 +122,25 @@ func convertToMapString(info interface{}) (map[string]string, error) {
 	res := make(map[string]string)
 	err = json.Unmarshal(byte, &res)
 	return res, err
+}
+
+func convertToProduction(tx *pb.Transaction) (*db.Product, error) {
+	txInfo := &db.Product{
+		Initiator: tx.Initiator,
+		TxId:      hex.EncodeToString(tx.Txid),
+	}
+	if len(tx.ContractRequests) == 0 {
+		return txInfo, nil
+	}
+	args, err := json.Marshal(tx.ContractRequests[0].Args)
+	if err != nil {
+		return nil, err
+	}
+	pro := db.ProBase{}
+	err = json.Unmarshal(args, &pro)
+	if err != nil {
+		return nil, err
+	}
+	txInfo.ProBase = pro
+	return txInfo, nil
 }

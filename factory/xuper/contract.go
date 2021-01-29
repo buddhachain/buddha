@@ -29,7 +29,7 @@ func PreInvokeWasmContract(from, amount, cName, methodName string, args map[stri
 			MethodName:   methodName,
 			ContractName: cName,
 			Args:         convertToXuperContractArgs(args),
-			//Amount:       amount,
+			Amount:       amount,
 		},
 	}
 

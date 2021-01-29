@@ -48,8 +48,8 @@ func NewDefaultConfig() zap.Config {
 			EncodeCaller:   zapcore.ShortCallerEncoder,
 		},
 		//InitialFields:    map[string]interface{}{"serviceName": "wisdom_park"}, // 初始化字段，如：添加一个服务器名称
-		OutputPaths:      []string{"stdout"},
-		ErrorOutputPaths: []string{"stderr"},
+		OutputPaths: []string{"stdout"},
+		//ErrorOutputPaths: []string{"stderr"},
 	}
 }
 

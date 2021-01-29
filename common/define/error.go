@@ -1,5 +1,7 @@
 package define
 
+import "github.com/pkg/errors"
+
 const (
 	Success = iota //成功
 	QueryErr
@@ -19,4 +21,12 @@ const (
 	IpfsCatErr
 
 	ReaderErr
+	ConvertErr
+	RightErr
+	RequestErr
+)
+
+var (
+	ErrRight   = errors.New("no permission")
+	ErrRequest = errors.New("request error")
 )
