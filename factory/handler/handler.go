@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"io/ioutil"
 
@@ -109,7 +110,7 @@ func PostRealTx(c *gin.Context) {
 		return
 	}
 	logger.Info("Post tx: %s success", txid)
-	txInfo := xuper.GetTxInfo(transaction)
+	txInfo := GetTxInfo(transaction)
 	if err := db.InsertTxInfo(txInfo); err != nil {
 		logger.Errorf("Insert tx info failed: %s", err.Error())
 		utils.Response(c, err, define.InsertDBErr, nil)
@@ -141,4 +142,20 @@ func readBody(c *gin.Context, req interface{}) error {
 		return errors.WithMessage(err, "read request body failed")
 	}
 	return json.Unmarshal(body, req)
+}
+
+func GetTxInfo(tx *pb.Transaction) *db.Transaction {
+	txInfo := &db.Transaction{
+		TxBase: db.TxBase{TxId: hex.EncodeToString(tx.Txid), Initiator: tx.Initiator},
+	}
+	for _, txOutPut := range tx.TxOutputs {
+		addr := txOutPut.ToAddr
+		if string(addr) != tx.Initiator {
+			txInfo.To = string(addr)
+			amountBigInt := xuper.FromAmountBytes(txOutPut.Amount)
+			txInfo.Amount = amountBigInt.String()
+			break
+		}
+	}
+	return txInfo
 }

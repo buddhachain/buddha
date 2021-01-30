@@ -111,6 +111,34 @@ func PostProductRealTx(c *gin.Context) {
 	return
 }
 
+func PostDelProductRealTx(c *gin.Context) {
+	logger.Debug("Entering delete product real tx...")
+	tx := &pb.Transaction{}
+	err, errCode := unmarshalProto(c, tx)
+	if err != nil {
+		logger.Errorf("Parse request body to pb.Transaction failed: %s", err.Error())
+		utils.Response(c, err, errCode, nil)
+		return
+	}
+	logger.Infof("Request info %+v", tx)
+	txid, err := xuper.PostRealTx(tx)
+	if err != nil {
+		logger.Errorf("Post real tx failed: %s", err.Error())
+		utils.Response(c, err, define.PostTxErr, nil)
+		return
+	}
+	logger.Info("Post tx: %s success", txid)
+	id := string(tx.ContractRequests[0].Args["id"])
+	err = db.DeleteProduct(id)
+	if err != nil {
+		logger.Errorf("Delete production %s info failed: %s", id, err.Error())
+		utils.Response(c, err, define.DeleteDBErr, nil)
+		return
+	}
+	utils.Response(c, nil, define.Success, &txid)
+	return
+}
+
 func convertToMapString(info interface{}) (map[string]string, error) {
 	byte, err := json.Marshal(info)
 	if err != nil {
@@ -143,4 +171,18 @@ func convertToProduction(tx *pb.Transaction) (*db.Product, error) {
 	}
 	txInfo.ProBase = pro
 	return txInfo, nil
+}
+
+func addNewProduct(tx db.TxBase, args []byte) (error, int) {
+	txInfo := &db.Product{Initiator: tx.Initiator}
+	pro := db.ProBase{}
+	err := json.Unmarshal(args, &pro)
+	if err != nil {
+		return err, define.UnmarshalErr
+	}
+	txInfo.ProBase = pro
+	if err := db.InsertRow(txInfo); err != nil {
+		return err, define.InsertDBErr
+	}
+	return nil, 0
 }

@@ -1,9 +1,7 @@
 package db
 
 type ContractTx struct {
-	ID           uint   `json:"id" gorm:"primary_key;AUTO_INCREMENT;column:id" form:"id"` // 需要做唯一索引,所以必须存在。
-	TxId         string `json:"txId"`
-	From         string `json:"from"`
+	TxBase
 	Amount       string `json:"amount"`
 	ContractName string `json:"contract_name"`
 	MethodName   string `json:"method_name"`

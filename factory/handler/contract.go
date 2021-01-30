@@ -102,8 +102,7 @@ func PostContractRealTx(c *gin.Context) {
 
 func convertToContractTx(tx *pb.Transaction) (*db.ContractTx, error) {
 	txInfo := &db.ContractTx{
-		From: tx.Initiator,
-		TxId: hex.EncodeToString(tx.Txid),
+		TxBase: db.TxBase{TxId: hex.EncodeToString(tx.Txid), Initiator: tx.Initiator},
 	}
 	if len(tx.ContractRequests) == 0 {
 		return txInfo, nil

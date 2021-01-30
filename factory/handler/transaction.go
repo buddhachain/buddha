@@ -54,10 +54,9 @@ func NewcomerCharge(c *gin.Context) {
 		return
 	}
 	err = db.InsertTxInfo(&db.Transaction{
-		From:   xuper.RootAddr,
+		TxBase: db.TxBase{TxId: txid, Initiator: xuper.RootAddr},
 		To:     addr,
 		Amount: NEWCOMERGIFTBAG,
-		TxId:   txid,
 	})
 	if err != nil {
 		logger.Errorf("Insert db failed %s", err.Error())

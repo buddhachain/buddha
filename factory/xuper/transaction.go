@@ -6,7 +6,6 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/buddhachain/buddha/factory/db"
 	"github.com/pkg/errors"
 	"github.com/xuperchain/xuper-sdk-go/common"
 	"github.com/xuperchain/xuper-sdk-go/pb"
@@ -102,21 +101,4 @@ func PostRealTx(tx *pb.Transaction) (string, error) {
 		return "", errors.Errorf("Failed to post tx: %s", txRes.Header.Error.String())
 	}
 	return hex.EncodeToString(tx.Txid), nil
-}
-
-func GetTxInfo(tx *pb.Transaction) *db.Transaction {
-	txInfo := &db.Transaction{
-		From: tx.Initiator,
-		TxId: hex.EncodeToString(tx.Txid),
-	}
-	for _, txOutPut := range tx.TxOutputs {
-		addr := txOutPut.ToAddr
-		if string(addr) != txInfo.From {
-			txInfo.To = string(addr)
-			amountBigInt := FromAmountBytes(txOutPut.Amount)
-			txInfo.Amount = amountBigInt.String()
-			break
-		}
-	}
-	return txInfo
 }

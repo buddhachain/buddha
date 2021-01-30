@@ -43,6 +43,7 @@ func createRouter() {
 			exchange.GET("/product/:id", handler.GetProductByID)
 			contract.POST("/product/post", handler.PostProductRealTx) //合约通用查询接口
 			exchange.POST("/product", handler.PreAddProduct)
+			exchange.POST("/product/delete", handler.PostDelProductRealTx)
 		}
 
 		ipfs := vGroup.Group("/ipfs")
