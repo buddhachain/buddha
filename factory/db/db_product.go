@@ -2,12 +2,13 @@ package db
 
 import "time"
 
+//善举信息
 type ProBase struct {
-	ID     string `json:"id" gorm:"primary_key;column:id" form:"id"` //产品编号
-	Name   string `json:"name"`                                      //产品名称
-	Desc   string `json:"desc"`                                      //产品描述
-	Price  string `json:"price"`                                     //产品价格
-	Amount string `json:"amount"`                                    //产品数量
+	ID    string `json:"id" gorm:"primary_key;column:id" form:"id"` //善举编号
+	Name  string `json:"name"`                                      //善举名称
+	Desc  string `json:"desc"`                                      //善举描述
+	Price string `json:"price"`                                     //善举价格
+	Count uint64 `json:"count"`                                     //善举数量
 }
 
 type Product struct {
@@ -19,6 +20,7 @@ type Product struct {
 	DeletedAt time.Time `json:"deleted_at"`
 }
 
+//DeleteProduct 删除善举信息
 func DeleteProduct(id string) error {
 	return DB.Where("\"id\" = ?", id).Delete(&Product{}).Error
 }

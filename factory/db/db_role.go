@@ -1,8 +1,6 @@
 package db
 
 import (
-	"time"
-
 	"gorm.io/gorm"
 )
 
@@ -25,15 +23,15 @@ func IsNewcomer(addr string) (bool, error) {
 	return false, nil
 }
 
-type Role struct {
-	Addr      string    `json:"addr" gorm:"primary_key"`
-	Role      uint32    `json:"role"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-}
-
-func GetRole(addr string) (*Role, error) {
-	role := &Role{}
-	err := DB.Where("\"addr\" = ?", addr).First(role).Error
-	return role, err
-}
+//type Role struct {
+//	Addr      string    `json:"addr" gorm:"primary_key"`
+//	Role      uint32    `json:"role"`
+//	CreatedAt time.Time `json:"created_at"`
+//	UpdatedAt time.Time `json:"updated_at"`
+//}
+//
+//func GetRole(addr string) (*Role, error) {
+//	role := &Role{}
+//	err := DB.Where("\"addr\" = ?", addr).First(role).Error
+//	return role, err
+//}
