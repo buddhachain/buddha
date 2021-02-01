@@ -1,0 +1,16 @@
+language: go
+
+sudo: false
+
+env:
+  - GO111MODULE=on
+
+go:
+  - tip
+
+services:
+  - mysql
+  - postgresql
+
+script:
+  - make test

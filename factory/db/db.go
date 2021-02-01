@@ -3,13 +3,18 @@ package db
 import (
 	"github.com/buddhachain/buddha/common/define"
 	"github.com/buddhachain/buddha/common/utils"
+	"github.com/casbin/casbin/v2"
+	xormadapter "github.com/casbin/xorm-adapter/v2"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/pkg/errors"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
 var (
-	DB     *gorm.DB
+	DB        *gorm.DB
+	CEnforcer *casbin.Enforcer
+
 	logger = utils.NewLogger("DEBUG", "factory/db")
 )
 
@@ -43,6 +48,13 @@ func InitDb(config *define.DbConfig) error {
 		logger.Errorf("Migrate tables failed %s", err.Error())
 		return errors.WithMessage(err, "migrate table failed")
 	}
+
+	err = initACL(config.Name, config.Model)
+	if err != nil {
+		logger.Errorf("init casbin acl failed %s", err.Error())
+		return errors.WithMessage(err, "casbin init failed")
+	}
+
 	logger.Info("Init db success.")
 	return nil
 }
@@ -68,6 +80,19 @@ func migrateTables() error {
 	//if err != nil {
 	//	return err
 	//}
+}
+
+func initACL(dbpath, model string) error {
+	a, err := xormadapter.NewAdapterWithTableName("sqlite3", dbpath, "role")
+	if err != nil {
+		return errors.WithMessage(err, "adapt table failed")
+	}
+	CEnforcer, err = casbin.NewEnforcer(model, a)
+	if err != nil {
+		return errors.WithMessage(err, "new enforcer failed")
+	}
+	// Load the policy from DB.
+	return CEnforcer.LoadPolicy()
 }
 
 func InsertTxInfo(tx *Transaction) error {

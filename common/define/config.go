@@ -13,6 +13,7 @@ type DbConfig struct {
 	Port   int    `json:"port"`
 	User   string `json:"user"`
 	Passwd string `json:"passwd"`
+	Model  string `json:"model" yaml:"model"` //casbin model path
 }
 
 type XchainConfig struct {
