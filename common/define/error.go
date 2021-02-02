@@ -15,9 +15,11 @@ const (
 
 	InsertDBErr
 	QueryDBErr
+	UpdateDBErr
 	DeleteDBErr
 
 	QueryContractErr
+	ContractRequestParamErr
 
 	LoadFileErr
 	IpfsAddErr
@@ -27,9 +29,9 @@ const (
 	ConvertErr
 	RightErr
 	RequestErr
-	ContractTxErr
+	UnknownContractMethod
 
-	UnkownContractMethod
+	ParamErr //参数错误
 )
 
 var (
@@ -37,4 +39,5 @@ var (
 	ErrRequest      = errors.New("request error")
 	ErrContractTx   = errors.New("invalid contract tx")
 	ErrContractArgs = errors.New("unmarshal contract args failed")
+	ErrParam        = errors.New("invalid param")
 )

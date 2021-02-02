@@ -84,7 +84,7 @@ func PostContractRealTx(c *gin.Context) {
 		utils.Response(c, err, define.PostTxErr, nil)
 		return
 	}
-	logger.Info("Post tx: %s success", txid)
+	logger.Infof("Post tx: %s success", txid)
 	txInfo, err := convertToContractTx(transaction)
 	if err != nil {
 		logger.Errorf("Convert to contract tx info failed: %s", err.Error())
@@ -100,9 +100,31 @@ func PostContractRealTx(c *gin.Context) {
 	return
 }
 
+//合约通用上传合约接口
+func PostContractRealTxAndParse(c *gin.Context) {
+	logger.Debug("Entering post real tx and parsing...")
+	transaction := &pb.Transaction{}
+	txId, err, errCode := postRealTx(c, transaction)
+	if err != nil {
+		logger.Errorf("Post real tx failed: %s", err.Error())
+		utils.Response(c, err, errCode, nil)
+		return
+	}
+	logger.Infof("Post tx: %s success", txId)
+	err, errCode = parseContractTx(transaction)
+	if err != nil {
+		logger.Errorf("Parse contract tx failed: %s", err.Error())
+		utils.Response(c, err, errCode, nil)
+		return
+	}
+	utils.Response(c, nil, define.Success, &txId)
+	return
+}
+
 func convertToContractTx(tx *pb.Transaction) (*db.ContractTx, error) {
 	txInfo := &db.ContractTx{
-		TxBase: db.TxBase{TxId: hex.EncodeToString(tx.Txid), Initiator: tx.Initiator},
+		TxBase: db.TxBase{TxId: hex.EncodeToString(tx.Txid),
+			Initiator: tx.Initiator, Timestamp: tx.Timestamp},
 	}
 	if len(tx.ContractRequests) == 0 {
 		return txInfo, nil

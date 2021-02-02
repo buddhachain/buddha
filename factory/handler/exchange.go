@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"encoding/hex"
 	"encoding/json"
 
 	"github.com/buddhachain/buddha/common/define"
@@ -12,13 +11,6 @@ import (
 	"github.com/pkg/errors"
 	"github.com/rs/xid"
 	"github.com/xuperchain/xuper-sdk-go/pb"
-)
-
-const (
-	FIND            = "find"
-	ADD             = "add"
-	EXCHANGE        = "exchange"
-	NEWCOMERGIFTBAG = "1000000" //0.0001BUD
 )
 
 func GetProductByID(c *gin.Context) {
@@ -155,7 +147,7 @@ func convertToMapString(info interface{}) (map[string]string, error) {
 func convertToProduction(tx *pb.Transaction) (*db.Product, error) {
 	txInfo := &db.Product{
 		Initiator: tx.Initiator,
-		TxId:      hex.EncodeToString(tx.Txid),
+		//TxId:      hex.EncodeToString(tx.Txid),
 	}
 	if len(tx.ContractRequests) == 0 {
 		return txInfo, nil
@@ -183,6 +175,20 @@ func addNewProduct(tx db.TxBase, args []byte) (error, int) {
 	txInfo.ProBase = pro
 	if err := db.InsertRow(txInfo); err != nil {
 		return err, define.InsertDBErr
+	}
+	return nil, 0
+}
+
+func deleteKindness(args []byte) (error, int) {
+	//txInfo := &db.Product{Initiator: tx.Initiator}
+	pro := db.ProBase{}
+	err := json.Unmarshal(args, &pro)
+	if err != nil {
+		return err, define.UnmarshalErr
+	}
+	err = db.DeleteProduct(pro.ID)
+	if err != nil {
+		return err, define.DeleteDBErr
 	}
 	return nil, 0
 }

@@ -2,15 +2,17 @@ package db
 
 //Master 寺院法师信息
 type Master struct {
-	Name  string `json:"name"`  //寺院法师姓名
-	Desc  string `json:"desc"`  //寺院法师描述
-	IsYet bool   `json:"isYet"` //是否已经是寺院法师
+	Name   string `json:"name"` //寺院法师姓名
+	Desc   string `json:"desc"` //寺院法师描述
+	status string `json:"status"`
 }
 
-//Founder 基金会信息
-type Founder struct {
-	Name   string `json:"name"`   //寺院法师姓名
-	Desc   string `json:"desc"`   //寺院法师描述
-	Amount string `json:"amount"` //抵押数量
-	IsYet  bool   `json:"isYet"`  //是否已经是寺院法师
+func GetMasterByName(name string) (*Master, error) {
+	res := &Master{}
+	err := DB.Where("\"name\" = ?", name).Last(res).Error
+	return res, err
+}
+
+func UpdateMasterStatus(value *Master, status string) error {
+	return DB.Model(value).Update("status", status).Error
 }
