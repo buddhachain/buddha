@@ -21,6 +21,7 @@ var (
 type TxBase struct {
 	TxId      string `json:"id" gorm:"primary_key;column:id" form:"id"` // 需要做唯一索引,所以必须存在。
 	Initiator string `json:"initiator"`
+	Timestamp int64  `json:"timestamp"`
 }
 
 type Transaction struct {
@@ -76,10 +77,15 @@ func migrateTables() error {
 	if err != nil {
 		return err
 	}
+	err = DB.AutoMigrate(&Founder{})
+	if err != nil {
+		return err
+	}
+	err = DB.AutoMigrate(&Master{})
+	if err != nil {
+		return err
+	}
 	return nil
-	//if err != nil {
-	//	return err
-	//}
 }
 
 func initACL(dbpath, model string) error {
@@ -109,4 +115,8 @@ func GetTxsByAddr(addr string, limit int) (txs []*Transaction, err error) {
 
 func InsertRow(value interface{}) error {
 	return DB.Create(value).Error
+}
+
+func UpdateAttr(value interface{}, key string, v interface{}) error {
+	return DB.Model(value).Update(key, v).Error
 }

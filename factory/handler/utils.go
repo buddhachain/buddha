@@ -31,9 +31,10 @@ func parseContractTx(tx *pb.Transaction) (error, int) {
 	txBase := db.TxBase{
 		TxId:      hex.EncodeToString(tx.Txid),
 		Initiator: tx.Initiator,
+		Timestamp: tx.Timestamp,
 	}
 	if len(tx.ContractRequests) != 1 {
-		return define.ErrContractTx, define.ContractTxErr
+		return define.ErrContractTx, define.ContractRequestParamErr
 	}
 	request := tx.ContractRequests[0]
 	args, err := json.Marshal(request.Args)
@@ -46,8 +47,23 @@ func parseContractTx(tx *pb.Transaction) (error, int) {
 		//TODO: 新的合约方法解析
 		logger.Infof("New product info %+v", request.Args)
 		err, errCode = addNewProduct(txBase, args)
+	case DELETEKIND:
+		logger.Infof("Delete kindness info %+v", request.Args)
+		err, errCode = deleteKindness(args)
+	case FOUNDERAPPLY:
+		logger.Infof("Apply to be founder info %+v", request.Args)
+		err, errCode = applyFounder(request.Amount, tx.Initiator, args)
+	case FOUNDERCOMMENT:
+		logger.Infof("Deployer comment founder apply info %+v", request.Args)
+		err, errCode = commentFounder(request.Args)
+	case MASTERAPPLY:
+		logger.Infof("Apply to be master info %+v", request.Args)
+		err, errCode = applyMaster(tx.Initiator, request.Args)
+	case MASTERCOMMENT:
+		logger.Infof("Master apply comment %+v", request.Args)
+		err, errCode = commentMaster(request.Args)
 	default:
-		return errors.Errorf("unkown contract method %s", request.MethodName), define.UnkownContractMethod
+		return errors.Errorf("Unknown contract method %s", request.MethodName), define.UnknownContractMethod
 	}
 	return err, errCode
 }

@@ -146,7 +146,8 @@ func readBody(c *gin.Context, req interface{}) error {
 
 func GetTxInfo(tx *pb.Transaction) *db.Transaction {
 	txInfo := &db.Transaction{
-		TxBase: db.TxBase{TxId: hex.EncodeToString(tx.Txid), Initiator: tx.Initiator},
+		TxBase: db.TxBase{TxId: hex.EncodeToString(tx.Txid), Initiator: tx.Initiator,
+			Timestamp: tx.Timestamp},
 	}
 	for _, txOutPut := range tx.TxOutputs {
 		addr := txOutPut.ToAddr

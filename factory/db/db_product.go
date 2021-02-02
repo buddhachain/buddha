@@ -13,8 +13,8 @@ type ProBase struct {
 
 type Product struct {
 	ProBase
-	Initiator string    `json:"initiator"`
-	TxId      string    `json:"tx_id"`
+	Initiator string `json:"initiator"`
+	//TxId      string    `json:"tx_id"`//善举信息无需包含txid
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 	DeletedAt time.Time `json:"deleted_at"`
