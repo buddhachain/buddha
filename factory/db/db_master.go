@@ -4,7 +4,7 @@ package db
 type Master struct {
 	Name   string `json:"name"` //寺院法师姓名
 	Desc   string `json:"desc"` //寺院法师描述
-	status string `json:"status"`
+	Status uint   `json:"status"`
 }
 
 func GetMasterByName(name string) (*Master, error) {
@@ -13,6 +13,6 @@ func GetMasterByName(name string) (*Master, error) {
 	return res, err
 }
 
-func UpdateMasterStatus(value *Master, status string) error {
+func UpdateMasterStatus(value *Master, status uint) error {
 	return DB.Model(value).Update("status", status).Error
 }

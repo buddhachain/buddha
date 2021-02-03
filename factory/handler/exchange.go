@@ -50,7 +50,7 @@ func PreAddProduct(c *gin.Context) {
 		utils.Response(c, err, define.ReadRequestBodyErr, nil)
 		return
 	}
-	//产品id由工具包生成uuid
+	//产品id由工具包生成uuid 20个字符
 	req.ID = xid.New().String()
 	logger.Infof("Request info %+v", req)
 	conReq, err := convertToMapString(req.Product)

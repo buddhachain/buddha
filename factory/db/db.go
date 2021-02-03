@@ -26,7 +26,7 @@ type TxBase struct {
 
 type Transaction struct {
 	TxBase
-	To     string `json:"to"`
+	To     string `json:"to"` //33字符
 	Amount string `json:"amount"`
 }
 
