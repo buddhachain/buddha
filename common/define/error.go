@@ -40,4 +40,5 @@ var (
 	ErrContractTx   = errors.New("invalid contract tx")
 	ErrContractArgs = errors.New("unmarshal contract args failed")
 	ErrParam        = errors.New("invalid param")
+	ErrCount        = errors.New("invalid count")
 )
