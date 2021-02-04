@@ -1,6 +1,5 @@
 db:
   name: ./data/xuper.db
-  model: ./data/rbac_model.conf
 
 # buddha server info
 api:
@@ -15,3 +14,8 @@ xchain:
 
 ipfs:
   url: "127.0.0.1:5001"
+
+casbin:
+  name: ./data/xuper.db
+  model: ./data/rbac_model.conf
+  deployer: dpzuVdosQrF2kmzumhVeFQZa1aYcdgFpN

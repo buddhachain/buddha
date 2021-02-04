@@ -50,6 +50,11 @@ func InitConfigWithCmdRoot(configFile string, cmdRootPrefix string) error {
 	if err != nil {
 		return errors.WithMessage(err, "init db failed")
 	}
+	err = db.InitACL(serverCfg.Casbin)
+	if err != nil {
+		logger.Errorf("init casbin acl failed %s", err.Error())
+		return errors.WithMessage(err, "casbin init failed")
+	}
 	err = xuper.InitXchainClient(serverCfg.Xchain)
 	if err != nil {
 		return errors.WithMessage(err, "init xchain client failed")
