@@ -55,6 +55,21 @@ func createRouter() {
 		{
 			charge.POST("/gift/newcomer", handler.NewcomerCharge)
 		}
+
+		{
+			vGroup.POST("/founder", handler.ApplyFounder)  //基金成员申请
+			vGroup.PUT("/founder", handler.ApproveFounder) //审核申请
+
+			vGroup.POST("/master", handler.ApplyMaster)  //申请成为法师
+			vGroup.PUT("/master", handler.ApproveMaster) //审核申请
+
+			vGroup.PUT("/kind/:id", handler.AddKind)   //善举入库
+			vGroup.POST("/kind", handler.ApplyKind)    //善举上架申请
+			vGroup.PUT("/kind", handler.ApproveKind)   //审核申请
+			vGroup.DELETE("/kind", handler.DeleteKind) //删除善行
+
+			vGroup.POST("/order", handler.CreatOrder) //创建新订单
+		}
 	}
 
 }

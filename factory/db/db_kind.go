@@ -1,6 +1,7 @@
 package db
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/buddhachain/buddha/common/define"
@@ -10,6 +11,7 @@ const (
 	Auditing = iota
 	Committed
 	Denied
+	Canceled
 )
 
 type Kind struct {
@@ -49,6 +51,14 @@ func GetCommittedKinds(initiator string) ([]*Kind, error) {
 	var kinds []*Kind
 	err := DB.Where(&Kind{Status: Committed, Initiator: initiator}).Find(&kinds).Error
 	return kinds, err
+}
+
+func UpdateKindStatus(k *Kind, status string) error {
+	s, err := strconv.Atoi(status)
+	if err != nil {
+		return err
+	}
+	return DB.Model(k).Update("status", s).Error
 }
 
 func GetKindByID(id string) (*Kind, error) {

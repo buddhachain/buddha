@@ -18,6 +18,9 @@ var (
 	logger = utils.NewLogger("DEBUG", "factory/db")
 )
 
+const Deployer = "Deployer"
+const MASTER = "Master"
+
 type TxBase struct {
 	TxId      string `json:"id" gorm:"primary_key;column:id" form:"id"` // 需要做唯一索引,所以必须存在。
 	Initiator string `json:"initiator"`
@@ -48,12 +51,6 @@ func InitDb(config *define.DbConfig) error {
 	if err != nil {
 		logger.Errorf("Migrate tables failed %s", err.Error())
 		return errors.WithMessage(err, "migrate table failed")
-	}
-
-	err = initACL(config.Name, config.Model)
-	if err != nil {
-		logger.Errorf("init casbin acl failed %s", err.Error())
-		return errors.WithMessage(err, "casbin init failed")
 	}
 
 	logger.Info("Init db success.")
@@ -88,17 +85,30 @@ func migrateTables() error {
 	return nil
 }
 
-func initACL(dbpath, model string) error {
-	a, err := xormadapter.NewAdapterWithTableName("sqlite3", dbpath, "role")
+func InitACL(conf *define.Casbin) error {
+	a, err := xormadapter.NewAdapterWithTableName("sqlite3", conf.Name, "role")
 	if err != nil {
 		return errors.WithMessage(err, "adapt table failed")
 	}
-	CEnforcer, err = casbin.NewEnforcer(model, a)
+	CEnforcer, err = casbin.NewEnforcer(conf.Model, a)
 	if err != nil {
 		return errors.WithMessage(err, "new enforcer failed")
 	}
 	// Load the policy from DB.
-	return CEnforcer.LoadPolicy()
+	err = CEnforcer.LoadPolicy()
+	if err != nil {
+		return errors.WithMessage(err, "load polivy failed")
+	}
+
+	_, err = CEnforcer.AddPolicy(conf.Deployer, Deployer, true)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func IsDeployer(addr string) (bool, error) {
+	return CEnforcer.Enforce(addr, Deployer, true)
 }
 
 func InsertTxInfo(tx *Transaction) error {

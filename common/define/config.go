@@ -5,6 +5,7 @@ type ServerConfig struct {
 	Api    *ApiConfig    `json:"api"`
 	Xchain *XchainConfig `json:"xchain"`
 	Ipfs   *IpfsConf     `json:"ipfs"`
+	Casbin *Casbin       `json:"casbin"`
 }
 
 type DbConfig struct {
@@ -13,7 +14,12 @@ type DbConfig struct {
 	Port   int    `json:"port"`
 	User   string `json:"user"`
 	Passwd string `json:"passwd"`
-	Model  string `json:"model" yaml:"model"` //casbin model path
+}
+
+type Casbin struct {
+	Name     string `json:"name"`               //casbin db path
+	Model    string `json:"model" yaml:"model"` //casbin model path
+	Deployer string `json:"deployer"`           //合约部署者
 }
 
 type XchainConfig struct {
