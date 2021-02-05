@@ -1,6 +1,7 @@
 package db
 
 import (
+	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
@@ -15,7 +16,7 @@ func IsNewcomer(addr string) (bool, error) {
 	newBag := &NewBag{}
 	err := DB.Where("\"addr\" = ?", addr).First(newBag).Error
 	if err != nil {
-		if err == gorm.ErrRecordNotFound {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return true, nil
 		}
 		return false, err

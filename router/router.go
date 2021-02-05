@@ -70,6 +70,19 @@ func createRouter() {
 
 			vGroup.POST("/order", handler.CreatOrder) //创建新订单
 		}
+
+		blog := vGroup.Group("/blog")
+		{
+			blog.POST("", handler.PubBlog)
+			blog.GET("", handler.GetBlogs)
+			blog.DELETE("/:id", handler.DeleteBlog)
+		}
+		comment := vGroup.Group("comment")
+		{
+			comment.POST("", handler.CreateComment)
+			comment.GET("", handler.GetComments) //根据动态id获取评论
+			comment.DELETE("/:id", handler.DeleteComment)
+		}
 	}
 
 }

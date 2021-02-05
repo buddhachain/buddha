@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"bytes"
 	"io/ioutil"
 
 	"github.com/buddhachain/buddha/common/define"
@@ -76,4 +77,9 @@ func CatIPFS(c *gin.Context) {
 	c.Header("Content-Transfer-Encoding", "binary")
 	c.Data(200, "application/octet-stream", body)
 	return
+}
+
+func AddContent(content []byte) (string, error) {
+	reader := bytes.NewReader(content)
+	return Sh.Add(reader)
 }
