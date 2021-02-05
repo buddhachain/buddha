@@ -31,5 +31,5 @@ func UpdateMasterStatus(value *Master, status string) error {
 }
 
 func IsMaster(addr string) (bool, error) {
-	return CEnforcer.Enforce(addr, MASTER, true)
+	return CEnforcer.Enforce(addr, MASTER, "true")
 }

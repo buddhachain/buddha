@@ -46,10 +46,10 @@ func UpdateFounderStatus(value *Founder, status string) error {
 }
 
 func AddFounder(addr string) error {
-	_, err := CEnforcer.AddPolicy(addr, FOUNDER, true)
+	_, err := CEnforcer.AddPolicy(addr, FOUNDER, "true")
 	return err
 }
 
 func IsFounder(addr string) (bool, error) {
-	return CEnforcer.Enforce(addr, FOUNDER, true)
+	return CEnforcer.Enforce(addr, FOUNDER, "true")
 }

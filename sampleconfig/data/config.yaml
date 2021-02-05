@@ -13,7 +13,8 @@ xchain:
   passwd:
 
 ipfs:
-  url: "127.0.0.1:5001"
+#  url: "127.0.0.1:5001"
+  url: "120.79.167.88:5001"
 
 casbin:
   name: ./data/xuper.db

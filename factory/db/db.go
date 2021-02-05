@@ -82,6 +82,14 @@ func migrateTables() error {
 	if err != nil {
 		return err
 	}
+	err = DB.AutoMigrate(&Blog{})
+	if err != nil {
+		return err
+	}
+	err = DB.AutoMigrate(&Comment{})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -100,7 +108,7 @@ func InitACL(conf *define.Casbin) error {
 		return errors.WithMessage(err, "load polivy failed")
 	}
 
-	_, err = CEnforcer.AddPolicy(conf.Deployer, Deployer, true)
+	_, err = CEnforcer.AddPolicy(conf.Deployer, Deployer, "true")
 	if err != nil {
 		return err
 	}
@@ -108,7 +116,7 @@ func InitACL(conf *define.Casbin) error {
 }
 
 func IsDeployer(addr string) (bool, error) {
-	return CEnforcer.Enforce(addr, Deployer, true)
+	return CEnforcer.Enforce(addr, Deployer, "true")
 }
 
 func InsertTxInfo(tx *Transaction) error {
