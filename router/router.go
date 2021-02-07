@@ -76,6 +76,8 @@ func createRouter() {
 			blog.POST("", handler.PubBlog)
 			blog.GET("", handler.GetBlogs)
 			blog.DELETE("/:id", handler.DeleteBlog)
+			blog.POST("/vote/:id", handler.VoteBlog)
+			blog.PUT("/vote/:id", handler.CancelVoteBlog)
 		}
 		comment := vGroup.Group("comment")
 		{

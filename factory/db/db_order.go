@@ -12,7 +12,7 @@ type Order struct {
 	KindID    string    `json:"kind_id"`                                   //善举ID
 	KindName  string    `json:"-"`                                         //善举名称
 	KindDesc  string    `json:"-"`                                         //善举描述
-	KindPrice string    `json:"-"`                                         //善举价格
+	KindPrice string    `json:"kind_price"`                                //善举价格 可能为打折后价格
 	KindCount uint64    `json:"count"`                                     //善举个数
 	Initiator string    `json:"initiator"`                                 //消费者
 	Status    int       `json:"status"`                                    //订单状态
