@@ -85,6 +85,18 @@ func createRouter() {
 			comment.GET("", handler.GetComments) //根据动态id获取评论
 			comment.DELETE("/:id", handler.DeleteComment)
 		}
+
+		//Q&A
+		qa := vGroup.Group("/qa")
+		{
+			qa.GET("", handler.GetQAInfo)
+			qa.POST("/issue", handler.NewQuestion)
+			qa.DELETE("/issue/:id", handler.DeleteQuestion)
+			qa.PATCH("/issue/vote/:id", handler.VoteIssue)
+			qa.PUT("/issue/vote/:id", handler.CancelVoteIssue)
+
+			qa.POST("/answer", handler.NewAnswer)
+		}
 	}
 
 }
