@@ -76,12 +76,26 @@ func createRouter() {
 			blog.POST("", handler.PubBlog)
 			blog.GET("", handler.GetBlogs)
 			blog.DELETE("/:id", handler.DeleteBlog)
+			blog.POST("/vote/:id", handler.VoteBlog)
+			blog.PUT("/vote/:id", handler.CancelVoteBlog)
 		}
 		comment := vGroup.Group("comment")
 		{
 			comment.POST("", handler.CreateComment)
 			comment.GET("", handler.GetComments) //根据动态id获取评论
 			comment.DELETE("/:id", handler.DeleteComment)
+		}
+
+		//Q&A
+		qa := vGroup.Group("/qa")
+		{
+			qa.GET("", handler.GetQAInfo)
+			qa.POST("/issue", handler.NewQuestion)
+			qa.DELETE("/issue/:id", handler.DeleteQuestion)
+			qa.PATCH("/issue/vote/:id", handler.VoteIssue)
+			qa.PUT("/issue/vote/:id", handler.CancelVoteIssue)
+
+			qa.POST("/answer", handler.NewAnswer)
 		}
 	}
 

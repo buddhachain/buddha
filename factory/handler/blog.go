@@ -92,3 +92,47 @@ func DeleteBlog(c *gin.Context) {
 	utils.Response(c, nil, define.Success, nil)
 	return
 }
+
+//为博客点赞
+func VoteBlog(c *gin.Context) {
+	logger.Debug("Voting blog ...")
+	id := c.Param("id")
+	uid, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		logger.Errorf("Parse id failed %s", err.Error())
+		utils.Response(c, err, define.ParamErr, nil)
+		return
+	}
+	user := c.GetHeader("user")
+	err = db.AddBlogVoteCount(id, user)
+	if err != nil {
+		logger.Errorf("Voting blog failed %s", err.Error())
+		utils.Response(c, err, define.UpdateDBErr, nil)
+		return
+	}
+	logger.Infof("Voting blog %d success", uid)
+	utils.Response(c, nil, define.Success, nil)
+	return
+}
+
+//取消博客点赞
+func CancelVoteBlog(c *gin.Context) {
+	logger.Debug("Cancel blog vote...")
+	id := c.Param("id")
+	uid, err := strconv.ParseUint(id, 10, 64)
+	if err != nil {
+		logger.Errorf("Parse id failed %s", err.Error())
+		utils.Response(c, err, define.ParamErr, nil)
+		return
+	}
+	user := c.GetHeader("user")
+	err = db.MinusBlogVoteCount(id, user)
+	if err != nil {
+		logger.Errorf("Cancel blog vote failed %s", err.Error())
+		utils.Response(c, err, define.UpdateDBErr, nil)
+		return
+	}
+	logger.Infof("Cancel blog vote %d success", uid)
+	utils.Response(c, nil, define.Success, nil)
+	return
+}
