@@ -1,16 +1,17 @@
 package define
 
 type ServerConfig struct {
-	Db     *DbConfig     `json:"db"`
-	Api    *ApiConfig    `json:"api"`
-	Xchain *XchainConfig `json:"xchain"`
-	Ipfs   *IpfsConf     `json:"ipfs"`
-	Casbin *Casbin       `json:"casbin"`
+	Db     map[string]*DbConfig `json:"db"`
+	Api    *ApiConfig           `json:"api"`
+	Xchain *XchainConfig        `json:"xchain"`
+	Ipfs   *IpfsConf            `json:"ipfs"`
+	Casbin *Casbin              `json:"casbin"`
 }
 
 type DbConfig struct {
 	Name   string `json:"name"`
 	Type   string `json:"type"` //默认sqlite3
+	IP     string `json:"ip"`
 	Port   int    `json:"port"`
 	User   string `json:"user"`
 	Passwd string `json:"passwd"`
