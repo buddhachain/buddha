@@ -119,7 +119,7 @@ func VoteIssue(c *gin.Context) {
 		utils.Response(c, err, define.UpdateDBErr, nil)
 		return
 	}
-	logger.Infof("Vote for qustion %d success", uid)
+	logger.Infof("Vote for question %d success", uid)
 	utils.Response(c, nil, define.Success, nil)
 	return
 }

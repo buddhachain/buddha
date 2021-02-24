@@ -1,5 +1,10 @@
 db:
-  name: ./data/xuper.db
+  xuper:
+    name: ./data/xuper.db
+  buddahist:
+    name: buddahist
+    ip: localhost
+    port: 27017
 
 # buddha server info
 api:

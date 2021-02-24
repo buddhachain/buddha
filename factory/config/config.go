@@ -46,7 +46,7 @@ func InitConfigWithCmdRoot(configFile string, cmdRootPrefix string) error {
 		return errors.WithMessage(err, "config format error")
 	}
 	logger.Info("Get server full config success.")
-	err = db.InitDb(serverCfg.Db)
+	err = db.InitDb(serverCfg.Db["xuper"])
 	if err != nil {
 		return errors.WithMessage(err, "init db failed")
 	}
