@@ -14,6 +14,8 @@ import (
 var logger = utils.NewLogger("debug", "mongo")
 var MDB *mongo.Database
 var READER *mongo.Collection
+var SUTRA *mongo.Collection
+var CATEGORY *mongo.Collection
 
 func InitMongo(conf *define.DbConfig) error {
 	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(fmt.Sprintf("mongodb://%s:%d", conf.IP, conf.Port)))
@@ -27,5 +29,7 @@ func InitMongo(conf *define.DbConfig) error {
 	fmt.Println("Connected to MongoDB!")
 	MDB = client.Database(conf.Name)
 	READER = MDB.Collection("reader")
+	SUTRA = MDB.Collection("sutra")
+	CATEGORY = MDB.Collection("category")
 	return nil
 }
