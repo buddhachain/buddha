@@ -97,6 +97,15 @@ func createRouter() {
 
 			qa.POST("/answer", handler.NewAnswer)
 		}
+		practise := vGroup.Group("/practise")
+		{
+			practise.POST("/sutra", handler.UploadSutra)
+			practise.GET("/sutra", handler.GetSutraInfo)
+			practise.GET("/category/:pid/sutra", handler.GetCategorySutrasInfo)
+			practise.POST("/sutra/category", handler.UploadSutraCategory)
+			practise.GET("/sutra/category", handler.GetSutraCategoryInfo)
+
+		}
 	}
 
 }
