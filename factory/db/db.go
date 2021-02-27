@@ -105,7 +105,7 @@ func InitACL(conf *define.Casbin) error {
 	// Load the policy from DB.
 	err = CEnforcer.LoadPolicy()
 	if err != nil {
-		return errors.WithMessage(err, "load polivy failed")
+		return errors.WithMessage(err, "load policy failed")
 	}
 
 	_, err = CEnforcer.AddPolicy(conf.Deployer, Deployer, "true")

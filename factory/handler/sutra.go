@@ -12,7 +12,7 @@ import (
 func UploadSutraCategory(c *gin.Context) {
 	logger.Debug("Uploading sutra category...")
 	category := &mongo.Category{}
-	err := readBody(c, category)
+	err := c.ShouldBindJSON(category)
 	if err != nil {
 		logger.Errorf("Read request body failed %s", err.Error())
 		utils.Response(c, err, define.RequestErr, nil)
@@ -102,5 +102,39 @@ func GetCategorySutrasInfo(c *gin.Context) {
 		return
 	}
 	utils.Response(c, nil, define.Success, sutras)
+	return
+}
+
+//新增阅读记录
+func NewSutraRead(c *gin.Context) {
+	logger.Debug("New user sutra reading info...")
+	bid := c.PostForm("bid")
+	user := c.GetHeader("user")
+	err := mongo.AddHits(bid, user)
+	if err != nil {
+		logger.Errorf("New user sutra reading info failed: %s", err.Error())
+		utils.Response(c, err, define.UpdateDBErr, nil)
+		return
+	}
+	logger.Infof("New user %s sutra %s reading info success", user, bid)
+	utils.Response(c, nil, define.Success, nil)
+	return
+}
+
+//获取用户佛经阅读历史信息
+func GetSutraReadingHistory(c *gin.Context) {
+	logger.Debug("Getting user sutra reading history...")
+	user := c.GetHeader("user")
+	page := c.Query("page")
+	count := c.Query("count")
+	logger.Infof("Getting user %s sutra reading history by page %s count %s", user, page, count)
+	history, err := mongo.GetSutraReadingHistory(user, page, count)
+	if err != nil {
+		logger.Errorf("Get sutra reading history info failed: %s", err.Error())
+		utils.Response(c, err, define.QueryDBErr, nil)
+		return
+	}
+	logger.Infof("Get sutra reading history info: %v", history)
+	utils.Response(c, nil, define.Success, history)
 	return
 }

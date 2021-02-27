@@ -104,7 +104,8 @@ func createRouter() {
 			practise.GET("/category/:pid/sutra", handler.GetCategorySutrasInfo)
 			practise.POST("/sutra/category", handler.UploadSutraCategory)
 			practise.GET("/sutra/category", handler.GetSutraCategoryInfo)
-
+			practise.PUT("/sutra/read", handler.NewSutraRead)
+			practise.GET("/sutra/history", handler.GetSutraReadingHistory)
 		}
 	}
 
