@@ -11,15 +11,15 @@ import (
 //经文表
 //佛经无需具体到章节名，
 type Sutra struct {
-	ID       primitive.ObjectID `bson:"_id" json:"id"`  //佛经id
-	Name     string             `json:"name"`           //经文名称
-	Intro    string             `json:"intro"`          //经文说明
-	ParentId string             `json:"pid" bson:"pid"` //上级分类id
-	Icon     []string           `json:"icon"`           //经文图片cid
-	Merits   string             `json:"merits"`         //经文功德
-	Content  string             `json:"content"`        //佛经内容
-	Tags     []string           `json:"tags"`           //经文标签
-	Favorite uint64             `json:"favorite"`       //收藏人数
+	ID       primitive.ObjectID `bson:"_id" json:"id"`            //佛经id
+	Name     string             `json:"name" binding:"required"`  //经文名称
+	Intro    string             `json:"intro" binding:"required"` //经文说明
+	ParentId string             `json:"pid" bson:"pid"`           //上级分类id
+	Icon     []string           `json:"icon"`                     //经文图片cid
+	Merits   string             `json:"merits"`                   //经文功德
+	Content  string             `json:"content"`                  //佛经内容
+	Tags     []string           `json:"tags"`                     //经文标签
+	Favorite uint64             `json:"favorite"`                 //收藏人数
 	//Remark string             `json:"remark"`
 }
 
