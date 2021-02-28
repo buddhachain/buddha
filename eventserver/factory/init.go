@@ -80,6 +80,6 @@ func InitXchainClient(config *XchainConfig) error {
 	if err != nil {
 		return err
 	}
-	HandleStram()
+	HandleStream()
 	return nil
 }

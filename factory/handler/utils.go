@@ -53,7 +53,7 @@ func parseContractTx(tx *pb.Transaction) (error, int) {
 	case FOUNDERAPPLY:
 		logger.Infof("Apply to be founder info %+v", request.Args)
 		err, errCode = applyFounder(request.Amount, tx.Initiator, args)
-	case FOUNDERCOMMENT:
+	case FOUNDERCOMMIT:
 		logger.Infof("Deployer comment founder apply info %+v", request.Args)
 		err, errCode = commentFounder(request.Args)
 	case MASTERAPPLY:

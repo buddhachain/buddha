@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"strconv"
 
 	"github.com/buddhachain/buddha/common/define"
 	"github.com/buddhachain/buddha/common/utils"
@@ -36,13 +35,7 @@ func ApproveFounder(c *gin.Context) {
 	logger.Debug("Auditing founder ...")
 	id := c.PostForm("id")
 	status := c.PostForm("status")
-	uid, err := strconv.Atoi(id)
-	if err != nil {
-		logger.Errorf("ID format failed %s", err.Error())
-		utils.Response(c, err, define.ParamErr, nil)
-		return
-	}
-	founder, err := db.GetFounderByID(uint64(uid))
+	founder, err := db.GetFounderByID(id)
 	if err != nil {
 		logger.Errorf("Get founder info failed %s", err.Error())
 		utils.Response(c, err, define.QueryDBErr, nil)
@@ -65,8 +58,9 @@ func applyFounder(amount, initiator string, args []byte) (error, int) {
 	if err != nil {
 		return err, define.UnmarshalErr
 	}
-	info.Name = initiator
-	info.Amount = amount
+	//info.Name = initiator
+	info.ID = initiator
+	info.Guaranty = amount
 	info.Status = 1
 	err = db.InsertRow(&info)
 	if err != nil {
@@ -76,7 +70,7 @@ func applyFounder(amount, initiator string, args []byte) (error, int) {
 }
 
 func commentFounder(args map[string][]byte) (error, int) {
-	name, ok := args["name"]
+	id, ok := args["id"]
 	if !ok {
 		return define.ErrParam, define.ParamErr
 	}
@@ -84,7 +78,7 @@ func commentFounder(args map[string][]byte) (error, int) {
 	if !ok {
 		return define.ErrParam, define.ParamErr
 	}
-	founder, err := db.GetFounderByName(string(name))
+	founder, err := db.GetFounderByID(string(id))
 	if err != nil {
 		return err, define.QueryDBErr
 	}

@@ -2,11 +2,21 @@ package db
 
 import "strconv"
 
+// 寺庙信息
+type Temple struct {
+	ID             uint64 `json:"id" gorm:"primary_key; AUTO_INCREMENT; column:id" form:"id"`
+	Unit           string `json:"unit" gorm:"unique"`                                  //寺院单位名称，唯一
+	Address        string `json:"address" gorm:"unique"`                               //寺院地址，唯一
+	CreditCode     string `json:"creditcode" gorm:"unique; column:creditcode"`         //社会信用代码，登记编号，唯一
+	DeedPlaceProof string `json:"deedplaceproof" gorm:"unique; column:deedplaceproof"` //宗教活动场所登记证hash，唯一
+}
+
 //Master 寺院法师信息
 type Master struct {
 	ID     uint64 `json:"id" gorm:"primary_key; AUTO_INCREMENT; column:id" form:"id"`
-	Name   string `json:"name"` //寺院法师姓名
-	Desc   string `json:"desc"` //寺院法师描述
+	Name   string `json:"name"`                  //寺院法师姓名
+	Desc   string `json:"desc"`                  //寺院法师描述
+	TID    uint64 `json:"tid" gorm:"column:tid"` //寺庙id
 	Status int    `json:"status"`
 }
 

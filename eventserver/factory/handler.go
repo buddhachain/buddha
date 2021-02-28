@@ -12,7 +12,7 @@ import (
 var stream pb.EventService_SubscribeClient
 var events chan *pb.Event
 
-func HandleStram() {
+func HandleStream() {
 	events = make(chan *pb.Event, 10)
 	go func() {
 		for {
