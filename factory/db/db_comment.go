@@ -10,7 +10,7 @@ type Comment struct {
 	Content   []byte    `json:"content"`   //评论内容
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"` //需改预留字段
-	DeletedAt time.Time `json:"deleted_at"`
+	//DeletedAt time.Time `json:"deleted_at"`
 }
 
 func GetCommentsByBlogID(id uint64) (comments []*Comment, err error) {
