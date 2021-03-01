@@ -16,6 +16,7 @@ var MDB *mongo.Database
 var READER *mongo.Collection
 var SUTRA *mongo.Collection
 var CATEGORY *mongo.Collection
+var USER *mongo.Collection
 
 func InitMongo(conf *define.DbConfig) error {
 	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(fmt.Sprintf("mongodb://%s:%d", conf.IP, conf.Port)))
@@ -31,5 +32,6 @@ func InitMongo(conf *define.DbConfig) error {
 	READER = MDB.Collection("reader")
 	SUTRA = MDB.Collection("sutra")
 	CATEGORY = MDB.Collection("category")
+	USER = MDB.Collection("user")
 	return nil
 }
