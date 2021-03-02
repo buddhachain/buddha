@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"github.com/buddhachain/buddha/factory/handler"
+	"github.com/buddhachain/buddha/factory/public"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,6 +24,13 @@ func createRouter() {
 
 	vGroup := router.Group("/v1")
 	{
+		user := vGroup.Group("/user")
+		{
+			user.POST("", public.PostNewUser)
+			user.GET("", public.GetUserInfo)
+			user.PATCH("/image", public.UpdateUserImage)
+			user.PATCH("/nickname", public.UpdateUserNickname)
+		}
 		vGroup.GET("/balance/:id", handler.GetBalance)
 		vGroup.GET("/detail/balance/:id", handler.GetBalanceDetail)
 		vGroup.GET("/tx/:id", handler.GetTx)
@@ -50,6 +58,7 @@ func createRouter() {
 		ipfs := vGroup.Group("/ipfs")
 		{
 			ipfs.GET("/cat/:id", handler.CatIPFS)
+			ipfs.POST("/image", handler.SaveImages)
 		}
 
 		charge := vGroup.Group("/charge")
