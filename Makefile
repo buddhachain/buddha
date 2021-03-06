@@ -1,14 +1,14 @@
 
 
 DOCKERIMAGENAME = buddhachain/buddha-server
-
+PKGNAME = github.com/buddhachain/buddha
 PREFIX = $(shell pwd)
 export DOCKERIMAGENAME
 export PREFIX
 
 buddha:
 	@echo "Building buddha...."
-	go build -ldflags "-linkmode external -extldflags '-static' -s -w" -mod=vendor -o sampleconfig/buddha
+	go build -o sampleconfig/buddha -ldflags "-linkmode external -extldflags '-static' -s -w" -mod=vendor $(PKGNAME)/cmd/apiserver
 
 event:
 	@echo "Building buddha...."

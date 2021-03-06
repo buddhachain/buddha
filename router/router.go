@@ -28,8 +28,8 @@ func createRouter() {
 		{
 			user.POST("", public.PostNewUser)
 			user.GET("", public.GetUserInfo)
-			user.PATCH("/image", public.UpdateUserImage)
-			user.PATCH("/nickname", public.UpdateUserNickname)
+			user.PUT("/image", public.UpdateUserImage)
+			user.PUT("/nickname", public.UpdateUserNickname)
 		}
 		vGroup.GET("/balance/:id", handler.GetBalance)
 		vGroup.GET("/detail/balance/:id", handler.GetBalanceDetail)

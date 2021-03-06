@@ -15,6 +15,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.3
 	github.com/pkg/errors v0.9.1
 	github.com/rs/xid v1.2.1
+	github.com/spf13/cobra v1.1.3
 	github.com/spf13/viper v1.7.1
 	github.com/xuperchain/xuper-sdk-go v0.0.0-20201120023737-65f831e12afa
 	github.com/xuperchain/xuperchain v0.0.0-20200518074727-6ec6c64891a4 // indirect
