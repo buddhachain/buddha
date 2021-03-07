@@ -9,6 +9,9 @@ db:
 # buddha server info
 api:
   port: 8686
+  jwt:
+    issuer: buddha
+    passwd: buddhist
 
 xchain:
   endorser: "127.0.0.1:37101"
@@ -19,9 +22,14 @@ xchain:
 
 ipfs:
 #  url: "127.0.0.1:5001"
-  url: "120.79.167.88:5001"
+  url: "103.40.243.96:5001"
+  explorer: "http://103.40.243.96::8080/ipfs"
 
 casbin:
   name: ./data/xuper.db
   model: ./data/rbac_model.conf
   deployer: dpzuVdosQrF2kmzumhVeFQZa1aYcdgFpN
+
+rc:
+  appKey: "pwe86ga5psja6"
+  appSecret: "Y5R2p1sVph0e"

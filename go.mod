@@ -7,6 +7,7 @@ require (
 	github.com/casbin/casbin v1.9.1 // indirect
 	github.com/casbin/casbin/v2 v2.23.0
 	github.com/casbin/xorm-adapter/v2 v2.1.0
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-kit/kit v0.8.0 // indirect
@@ -14,8 +15,9 @@ require (
 	github.com/ipfs/go-ipfs-api v0.2.0
 	github.com/mattn/go-sqlite3 v1.14.3
 	github.com/pkg/errors v0.9.1
+	github.com/rongcloud/server-sdk-go/v3 v3.2.0
 	github.com/rs/xid v1.2.1
-	github.com/spf13/cobra v1.1.3
+	github.com/spf13/cobra v1.1.3 // indirect
 	github.com/spf13/viper v1.7.1
 	github.com/xuperchain/xuper-sdk-go v0.0.0-20201120023737-65f831e12afa
 	github.com/xuperchain/xuperchain v0.0.0-20200518074727-6ec6c64891a4 // indirect

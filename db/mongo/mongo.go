@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/buddhachain/buddha/common/define"
+	"github.com/buddhachain/buddha/apiserver/factory/config"
 	"github.com/buddhachain/buddha/common/utils"
 	"github.com/pkg/errors"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -18,7 +18,7 @@ var SUTRA *mongo.Collection
 var CATEGORY *mongo.Collection
 var USER *mongo.Collection
 
-func InitMongo(conf *define.DbConfig) error {
+func InitMongo(conf *config.DbConfig) error {
 	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(fmt.Sprintf("mongodb://%s:%d", conf.IP, conf.Port)))
 	if err != nil {
 		return errors.WithMessage(err, "connect mongo err")

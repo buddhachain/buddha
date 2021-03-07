@@ -9,9 +9,10 @@ import (
 	"syscall"
 
 	"github.com/DeanThompson/ginpprof"
+	"github.com/buddhachain/buddha/apiserver/factory/config"
+	"github.com/buddhachain/buddha/apiserver/router"
+	"github.com/buddhachain/buddha/apiserver/server"
 	"github.com/buddhachain/buddha/common/utils"
-	"github.com/buddhachain/buddha/factory/config"
-	"github.com/buddhachain/buddha/router"
 	"github.com/fvbock/endless"
 	"github.com/gin-gonic/gin"
 )
@@ -29,7 +30,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
+	err = server.InitClient()
+	if err != nil {
+		panic(err)
+	}
 	// 设置使用系统最大CPU
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	// 运行模式
