@@ -15,6 +15,7 @@ var logger = utils.NewLogger("debug", "mongo")
 var MDB *mongo.Database
 var READER *mongo.Collection
 var SUTRA *mongo.Collection
+var TEMPLE *mongo.Collection
 var CATEGORY *mongo.Collection
 var USER *mongo.Collection
 
@@ -33,5 +34,6 @@ func InitMongo(conf *config.DbConfig) error {
 	SUTRA = MDB.Collection("sutra")
 	CATEGORY = MDB.Collection("category")
 	USER = MDB.Collection("user")
+	TEMPLE = MDB.Collection("temple")
 	return nil
 }

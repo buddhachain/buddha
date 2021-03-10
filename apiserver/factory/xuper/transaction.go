@@ -102,3 +102,14 @@ func PostRealTx(tx *pb.Transaction) (string, error) {
 	}
 	return hex.EncodeToString(tx.Txid), nil
 }
+
+func PostTxStatus(tx *pb.TxStatus) (string, error) {
+	txRes, err := chainClient.PostTx(context.Background(), tx)
+	if err != nil {
+		return "", errors.WithMessage(err, "post tx failed")
+	}
+	if txRes.Header.Error != pb.XChainErrorEnum_SUCCESS {
+		return "", errors.Errorf("Failed to post tx: %s", txRes.Header.Error.String())
+	}
+	return hex.EncodeToString(tx.Txid), nil
+}

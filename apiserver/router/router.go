@@ -31,6 +31,7 @@ func createRouter() {
 			user.GET("", public.GetUserInfo)
 			user.PUT("/image", public.UpdateUserImage)
 			user.PUT("/nickname", public.UpdateUserNickname)
+			user.POST("/temple", handler.UploadTemple)
 		}
 		//vGroup.Use(public.TokenAuthMiddleware())
 		vGroup.GET("/balance/:id", handler.GetBalance)

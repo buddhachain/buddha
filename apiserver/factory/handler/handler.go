@@ -10,7 +10,6 @@ import (
 	"github.com/buddhachain/buddha/common/define"
 	"github.com/buddhachain/buddha/common/utils"
 	"github.com/gin-gonic/gin"
-	"github.com/golang/protobuf/proto"
 	"github.com/pkg/errors"
 	"github.com/xuperchain/xuper-sdk-go/pb"
 )
@@ -89,28 +88,28 @@ func PreExec(c *gin.Context) {
 //将已签名的tx上传至链上，返回txid
 func PostRealTx(c *gin.Context) {
 	logger.Debug("Entering post real tx...")
-	body, err := ioutil.ReadAll(c.Request.Body)
-	if err != nil {
-		logger.Errorf("Read request body failed %s", err.Error())
-		utils.Response(c, err, define.ReadRequestBodyErr, nil)
-		return
-	}
-	transaction := &pb.Transaction{}
-	err = proto.Unmarshal(body, transaction)
+	//body, err := ioutil.ReadAll(c.Request.Body)
+	//if err != nil {
+	//	logger.Errorf("Read request body failed %s", err.Error())
+	//	utils.Response(c, err, define.ReadRequestBodyErr, nil)
+	//	return
+	//}
+	transaction := &pb.TxStatus{}
+	err := c.ShouldBindJSON(transaction)
 	if err != nil {
 		logger.Errorf("Unmarshal request body to pb.Transaction failed: %s", err.Error())
 		utils.Response(c, err, define.UnmarshalErr, nil)
 		return
 	}
 	logger.Infof("Request info %+v", transaction)
-	txid, err := xuper.PostRealTx(transaction)
+	txid, err := xuper.PostTxStatus(transaction)
 	if err != nil {
 		logger.Errorf("Post real tx failed: %s", err.Error())
 		utils.Response(c, err, define.PostTxErr, nil)
 		return
 	}
 	logger.Info("Post tx: %s success", txid)
-	txInfo := GetTxInfo(transaction)
+	txInfo := GetTxInfo(transaction.Tx)
 	if err := db.InsertTxInfo(txInfo); err != nil {
 		logger.Errorf("Insert tx info failed: %s", err.Error())
 		utils.Response(c, err, define.InsertDBErr, nil)
