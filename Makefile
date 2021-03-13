@@ -12,7 +12,7 @@ buddha:
 
 event:
 	@echo "Building buddha...."
-	cd eventserver && go build -ldflags "-linkmode external -extldflags '-static' -s -w" -mod=vendor -o eventserver
+	go build -o eventserver/eventserver -ldflags "-linkmode external -extldflags '-static' -s -w" -mod=vendor $(PKGNAME)/cmd/eventserver
 
 image:
 	@echo "Building image...."
