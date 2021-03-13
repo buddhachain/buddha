@@ -1,11 +1,16 @@
 db:
-  name: ./data/event.db
+  sql:
+    name: ./data/event.db
+  mongo:
+    name: buddhist
+    ip: localhost
+    port: 27017
 
 # buddha server info
 api:
   port: 8686
 
 xchain:
-  endorser: "127.0.0.1:37101"
-  node: "127.0.0.1:37101"
+  endorser: "120.79.167.88:37101"
+  node: "120.79.167.88:37101"
   bcname: xuper

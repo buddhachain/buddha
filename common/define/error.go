@@ -31,7 +31,9 @@ const (
 	RequestErr
 	UnknownContractMethod
 
-	ParamErr //参数错误
+	ParamErr         //参数错误
+	TokenErr         //验证t错误
+	RegisterTokenErr //生成token错误
 )
 
 var (
@@ -41,4 +43,5 @@ var (
 	ErrContractArgs = errors.New("unmarshal contract args failed")
 	ErrParam        = errors.New("invalid param")
 	ErrCount        = errors.New("invalid count")
+	ErrToken        = errors.New("invalid token")
 )

@@ -1,6 +1,7 @@
 package factory
 
 import (
+	"github.com/buddhachain/buddha/eventserver/config"
 	"github.com/pkg/errors"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -32,10 +33,11 @@ type ContractEvent struct {
 	Body     string `json:"body"`
 }
 
-func InitDb(config *DbConfig) error {
-	logger.Infof("Using db config %+v", config)
+func InitDb() error {
+	conf := config.SQLDBInfo()
+	logger.Infof("Using db config %+v", conf)
 	var err error
-	DB, err = gorm.Open(sqlite.Open(config.Name), &gorm.Config{})
+	DB, err = gorm.Open(sqlite.Open(conf.Name), &gorm.Config{})
 	if err != nil {
 		logger.Fatalf("Initialization database connection error.")
 		return errors.WithMessage(err, "open db failed")
@@ -53,7 +55,7 @@ func InitDb(config *DbConfig) error {
 		logger.Errorf("Migrate table failed %s", err.Error())
 		return errors.WithMessage(err, "migrate table failed")
 	}
-	logger.Info("Init db success.")
+	logger.Info("Init sql db success.")
 	return nil
 }
 
